@@ -15,16 +15,24 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { TransferFromComponent } from './transfer-from/transfer-from.component';
+import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
+import { BurnDialogComponent } from './burn-dialog/burn-dialog.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    AssetDialogComponent
+    AssetDialogComponent,
+    TransferFromComponent,
+    TransferDialogComponent,
+    BurnDialogComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule, HttpClientModule, BrowserAnimationsModule, MatTableModule,MatInputModule,MatButtonModule,MatPaginatorModule,
-    MatDialogModule,FormsModule, ReactiveFormsModule,MatSnackBarModule,MatIconModule,MatToolbarModule
+    MatDialogModule,FormsModule, ReactiveFormsModule,MatSnackBarModule,MatIconModule,MatToolbarModule,MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

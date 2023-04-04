@@ -1,6 +1,8 @@
-<mat-toolbar   color="primary"><div style="text-align: center;width: 100%;">Asset (Create,Edit,Delete,Transfer)</div></mat-toolbar>
+<mat-toolbar color="primary">
+    <div style="text-align: center;width: 100%;">Token Details</div>
+</mat-toolbar>
 <div class="layout">
-    <div class="layout">
+    <!-- <div class="layout">
         Assets
         <div class="search">
             <mat-form-field>
@@ -62,5 +64,87 @@
         </table>
         <mat-paginator [length]="100" showFirstLastButtons [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
         </mat-paginator>
+    </div> -->
+
+
+    <div class="row" style="margin-top: 0px; display: flex; justify-content:space-between 10px;">
+        <div class="col-lg-3">
+            <mat-card>
+                <div>Name :
+                    {{response.name}}
+                </div>
+            </mat-card>
+        </div>
+
+        <div class="col-lg-3">
+            <mat-card>
+                <div>Symbol :
+                    {{response.symbol}}
+                </div>
+            </mat-card>
+        </div>
+
+        <div class="col-lg-3">
+            <mat-card>
+                <div>Type :
+                    {{response.type}}
+                </div>
+            </mat-card>
+        </div>
+
+        <!-- <div class="col-lg-3">
+          <mat-card>
+              <div>Created :
+                <span *ngIf="response.created!=null">{{utility.getDate(response.created)}}
+                  {{utility.getTime(response.created)}}</span>          </div>
+          </mat-card>
+        </div> -->
+
     </div>
+
+    <div class="row" style="margin-top: 20px; display: flex; justify-content:space-between 10px;">
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Cluster Info
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Token Name
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Token Symbol
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Info
+        </button>
+
+        <button (click)="transferFromSave()" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Transfer From
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Mint
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Total Supply
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Client Account Balance
+        </button>
+
+        <button routerLink="" style="margin: 0px 20px; margin-top: 10px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Balance Off
+        </button>
+
+        <button (click)="transferSave()" style="margin: 0px 20px; margin-top: 10px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Transfer
+        </button>
+
+        <button (click)="burnSave()" style="margin: 0px 20px; margin-top: 10px;" mat-raised-button color="primary">
+            <mat-icon>upgrade</mat-icon> Burn
+        </button>
+
 </div>
