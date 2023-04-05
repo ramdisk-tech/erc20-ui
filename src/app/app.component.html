@@ -101,50 +101,38 @@
         </div> -->
 
     </div>
+    <div style="margin-top: 20px;">
+        <h4>Mint</h4>
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>Enter the token count</mat-label>
+                <input matInput (keyup)="applyFilter($event)"  #input>
+            </mat-form-field>
+            <button style="margin-left: 20px;" mat-raised-button color="primary">
+                Mint
+            </button>
+        </div>
+    </div>
 
-    <div class="row" style="margin-top: 20px; display: flex; justify-content:space-between 10px;">
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Cluster Info
+    <div class="row" style="margin-top: 20px;">
+        <button (click)="transferFromSave()" mat-raised-button color="primary">
+            Transfer From
         </button>
 
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Token Name
-        </button>
-
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Token Symbol
-        </button>
-
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Info
-        </button>
-
-        <button (click)="transferFromSave()" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Transfer From
-        </button>
-
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Mint
-        </button>
-
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Total Supply
-        </button>
-
-        <button routerLink="" style="margin: 0px 20px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Client Account Balance
+        <button routerLink="" mat-raised-button color="primary">
+            Client Account Balance
         </button>
 
         <button routerLink="" style="margin: 0px 20px; margin-top: 10px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Balance Off
+            Balance Off
         </button>
 
         <button (click)="transferSave()" style="margin: 0px 20px; margin-top: 10px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Transfer
+            Transfer
         </button>
 
         <button (click)="burnSave()" style="margin: 0px 20px; margin-top: 10px;" mat-raised-button color="primary">
-            <mat-icon>upgrade</mat-icon> Burn
+            Burn
         </button>
 
-</div>
+    </div>
