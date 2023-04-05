@@ -16,16 +16,10 @@ export class ApiService {
   constructor(private http: HttpClient) {
     this.httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'token':'24'
       })
     }
-    this.httpOptions1 = {
-      headers: new HttpHeaders({
-        'Content-Type': 'text/plain'
-      })
-    }
-
-    this.blobHttpOptions = { headers: this.httpOptions, responseType: 'blob' }
   }
 
   //token
@@ -35,8 +29,8 @@ export class ApiService {
   tokenSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.TOKEN_SAVE, JSON.stringify(data), this.httpOptions)
   }
-  tokenListById(data: any): Observable<any> {
-    return this.http.get<any>(URLS.TOKEN_DETAILS + "/" + data, this.httpOptions)
+  tokenListById(): Observable<any> {
+    return this.http.get<any>(URLS.TOKEN_DETAILS, this.httpOptions)
   }
 
 }

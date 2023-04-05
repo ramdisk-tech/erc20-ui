@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       // this.tokenId = params['id'];
       // this.tokenName = params['name'];
-      this.apiService.tokenListById(11).subscribe((response: any) => {
+      this.apiService.tokenListById().subscribe((response: any) => {
         this.response = response;
         this.dataSource.data = response.data;
         console.log("token list : " + this.dataSource.data);

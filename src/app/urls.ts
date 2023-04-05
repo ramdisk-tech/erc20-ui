@@ -9,5 +9,5 @@ export class URLS {
     //Token
    public static TOKEN_LIST = URLS.IP + "token/listByNetworkId";
    public static TOKEN_SAVE = URLS.IP + "token/save";
-   public static TOKEN_DETAILS = URLS.IP + "token/listByTokenId";
+   public static TOKEN_DETAILS = URLS.IP + "erc20/info";
 }
