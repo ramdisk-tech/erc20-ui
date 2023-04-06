@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-    <div style="text-align: center;width: 100%;">Token Details</div>
+    <div style="width: 100%;">Token Details</div>
 </mat-toolbar>
 <div class="layout">
     <!-- <div class="layout">
@@ -91,6 +91,13 @@
                 </div>
             </mat-card>
         </div>
+        <div class="col-lg-3">
+            <mat-card>
+                <div>Total supply :
+                    {{response.totalSupply}}
+                </div>
+            </mat-card>
+        </div>
 
         <!-- <div class="col-lg-3">
           <mat-card>
@@ -101,20 +108,110 @@
         </div> -->
 
     </div>
-    <div style="margin-top: 20px;">
-        <h4>Mint</h4>
-        <div>
-            <mat-form-field appearance="outline">
-                <mat-label>Enter the token count</mat-label>
-                <input matInput (keyup)="applyFilter($event)"  #input>
-            </mat-form-field>
-            <button style="margin-left: 20px;" mat-raised-button color="primary">
-                Mint
-            </button>
+    <form [formGroup]="mintForm" (ngSubmit)="onSubmit()" style="padding: 10px;">
+        <div style="margin-top: 10px;">
+            <h4>Mint</h4>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter the token count</mat-label>
+                    <input matInput type="number" formControlName="amount" required>
+                </mat-form-field>
+                <button [disabled]="!mintForm.valid" style="margin-left: 20px;" mat-raised-button color="primary">
+                    Mint
+                </button>
+            </div>
         </div>
-    </div>
+    </form>
 
-    <div class="row" style="margin-top: 20px;">
+    <form [formGroup]="transferFromForm" (ngSubmit)="onSubmitTransferFrom()" style="padding: 10px;">
+        <div style="margin-top: 10px;">
+            <h4>Transfer From</h4>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Transfer From</mat-label>
+                    <input matInput type="text" formControlName="from" required>
+                </mat-form-field>
+                <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
+                    <mat-label>Transfer To</mat-label>
+                    <input matInput type="text" formControlName="to" required>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Amount</mat-label>
+                    <input matInput type="number" formControlName="value" required>
+                </mat-form-field>
+                <button style="margin-left: 20px;" [disabled]="!transferFromForm.valid" mat-raised-button color="primary">
+                    Transfer From
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="onSubmitClientAccountBalance()" style="padding: 10px;">
+        <div style="margin-top: 10px;">
+            <h4>Client Account Balance</h4>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Name Of The Client</mat-label>
+                    <input matInput type="text" formControlName="name" required>
+                </mat-form-field>
+                <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;" mat-raised-button color="primary">
+                    Client Account Balance
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form [formGroup]="BalanceOfForm" (ngSubmit)="onSubmitBalanceOff()" style="padding: 10px;">
+        <div style="margin-top: 10px;">
+            <h4>Balance Off</h4>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Amount</mat-label>
+                    <input matInput type="text" formControlName="user" required>
+                </mat-form-field>
+                <button [disabled]="!BalanceOfForm.valid" style="margin-left: 20px;" mat-raised-button color="primary">
+                    Balance Off
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form [formGroup]="transferForm" (ngSubmit)="onSubmitTransfer()" style="padding: 10px;">
+        <div style="margin-top: 10px;">
+            <h4>Transfer</h4>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Transfer To</mat-label>
+                    <input matInput type="text" formControlName="to" required>
+                </mat-form-field>
+                <mat-form-field appearance="outline" style="margin-left: 10px;">
+                    <mat-label>Amount</mat-label>
+                    <input matInput type="number" formControlName="value" required>
+                </mat-form-field>
+                <button [disabled]="!transferForm.valid" style="margin-left: 20px;" mat-raised-button color="primary">
+                    Transfer
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form [formGroup]="burnForm" (ngSubmit)="onSubmitBurn()" style="padding:10px;">
+        <div style="margin-top:10px;">
+            <h4>Burn</h4>
+            <div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Amount</mat-label>
+                    <input matInput type="number" formControlName="amount" required>
+                </mat-form-field>
+                <button [disabled]="!burnForm.valid" style="margin-left: 20px;" mat-raised-button color="primary">
+                    Burn
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+    <!-- <div class="row" style="margin-top: 10px;">
         <button (click)="transferFromSave()" mat-raised-button color="primary">
             Transfer From
         </button>
@@ -135,4 +232,4 @@
             Burn
         </button>
 
-    </div>
+    </div> -->

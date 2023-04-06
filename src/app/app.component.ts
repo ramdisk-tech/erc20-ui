@@ -12,6 +12,7 @@ import { ApiService } from 'src/api-service';
 import { TransferFromComponent } from './transfer-from/transfer-from.component';
 import { BurnDialogComponent } from './burn-dialog/burn-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +20,29 @@ import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.compo
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  mintForm = new FormGroup({
+    amount: new FormControl('', Validators.required),
+  });
+  transferFromForm = new FormGroup({
+    from: new FormControl('', Validators.required),
+    to: new FormControl('', Validators.required),
+    value: new FormControl('', Validators.required),
+  });
+  clientAccountBalanceForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+  });
+  transferForm = new FormGroup({
+    to: new FormControl('', Validators.required),
+    value: new FormControl('', Validators.required),
+  });
+  BalanceOfForm = new FormGroup({
+    user: new FormControl('', Validators.required),
+  });
+  burnForm = new FormGroup({
+    amount: new FormControl('', Validators.required),
+  });
 
-  @ViewChild(MatSort, { static: false }) sort!: MatSort ;
+  @ViewChild(MatSort, { static: false }) sort!: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   dataSource = new MatTableDataSource();
   title = 'frontend';
@@ -28,34 +50,32 @@ export class AppComponent implements OnInit {
   tokenColumns: string[] = ['id', 'name', 'symbol', 'type', 'created'];
   response: any = [];
   showUi = false;
+  utility: any;
 
-  constructor(private _http: HttpClient, private dialog: MatDialog,private snackBar:MatSnackBar, private activatedRoute: ActivatedRoute,
-    private apiService: ApiService) {
-    
-    this.activatedRoute.params.subscribe(params => {
-      // this.tokenId = params['id'];
-      // this.tokenName = params['name'];
-      this.apiService.tokenListById().subscribe((response: any) => {
-        this.response = response;
-        this.dataSource.data = response.data;
-        console.log("token list : " + this.dataSource.data);
-        this.showUi = true;
-      });
+  constructor(private _http: HttpClient, private dialog: MatDialog, private snackBar: MatSnackBar, private activatedRoute: ActivatedRoute,
+    private apiService: ApiService,) {
+    this.tokenInfo();
 
-    });
-    
   }
   ngOnInit() {
-    
- }
-  editRow(asset:any,index:number){
+
+  }
+  tokenInfo() {
+    this.apiService.tokenListById().subscribe((response: any) => {
+      this.response = response;
+      this.dataSource.data = response.data;
+      console.log("token list : " + this.dataSource.data);
+      this.showUi = true;
+    });
+  }
+  editRow(asset: any, index: number) {
     const dialogRef = this.dialog.open(AssetDialogComponent, {
-      width: '500px', height: '100vh',position:{right:'0'},data:asset
+      width: '500px', height: '100vh', position: { right: '0' }, data: asset
 
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.dataSource.data[index]=(result)
+        this.dataSource.data[index] = (result)
         this.dataSource._updateChangeSubscription();
       }
     });
@@ -69,9 +89,9 @@ export class AppComponent implements OnInit {
   //     });
   //      })
   // }
-  addNewAsset(){
+  addNewAsset() {
     const dialogRef = this.dialog.open(AssetDialogComponent, {
-      width: '500px', height: '100vh',position:{right:'0'},
+      width: '500px', height: '100vh', position: { right: '0' },
 
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -88,7 +108,7 @@ export class AppComponent implements OnInit {
     //   return;
     // }
     const dialogRef = this.dialog.open(TransferFromComponent, {
-      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: { }
+      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: {}
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
@@ -100,7 +120,7 @@ export class AppComponent implements OnInit {
 
   transferSave() {
     const dialogRef = this.dialog.open(TransferDialogComponent, {
-      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: { }
+      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: {}
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
@@ -112,7 +132,7 @@ export class AppComponent implements OnInit {
 
   burnSave() {
     const dialogRef = this.dialog.open(BurnDialogComponent, {
-      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: { }
+      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: {}
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
@@ -125,10 +145,111 @@ export class AppComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-   }
-   ngAfterViewInit() {
+  }
+  ngAfterViewInit() {
     console.log('after ininti');
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  request: any
+  onSubmit() {
+    this.request = this.mintForm.value;
+    this.apiService.mintSave(this.request).subscribe((response: any) => {
+      this.tokenInfo();
+      if (response.status == 0) {
+        this.snackBar.open("Minted Sucessfully", "X", { "duration": 3000 });
+        this.mintForm.reset();
+      }
+      else {
+        this.snackBar.open("Minting failed", "X", { "duration": 3000 });
+      }
+    })
+  }
+
+  onSubmitTransferFrom() {
+    this.request = this.transferFromForm.value;
+    // this.request['userId'] = this.userId;
+    this.apiService.transferFromSave(this.request).subscribe((response: any) => {
+      this.tokenInfo();
+
+      if (response.status == 0) {
+        // this.snackBar.open('Saved Sucessfully');
+        this.utility.showSnackBar(this.snackBar, 'Save Successful', 3000);
+        // this.mintForm.reset();
+      }
+      else {
+        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+      }
+    })
+  }
+
+  onSubmitClientAccountBalance() {
+    this.request = this.clientAccountBalanceForm.value;
+    // this.request['userId'] = this.userId;
+    this.apiService.clientAccountBalanceSave(this.request).subscribe((response: any) => {
+      this.tokenInfo();
+
+      if (response.status == 0) {
+        // this.snackBar.open('Saved Sucessfully');
+        this.utility.showSnackBar(this.snackBar, 'Save Successful');
+        // this.mintForm.reset();
+      }
+      else {
+        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+      }
+    })
+  }
+
+  onSubmitBalanceOff() {
+    this.request = this.BalanceOfForm.value;
+    // this.request['userId'] = this.userId;
+    this.apiService.BalanceOffSave(this.request).subscribe((response: any) => {
+      this.tokenInfo();
+
+      if (response.status == 0) {
+        // this.snackBar.open('Saved Sucessfully');
+        this.utility.showSnackBar(this.snackBar, 'Save Successful');
+        // this.mintForm.reset();
+      }
+      else {
+        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+      }
+    })
+  }
+
+  onSubmitTransfer() {
+    this.request = this.transferForm.value;
+    // this.request['userId'] = this.userId;
+    this.apiService.transferSave(this.request).subscribe((response: any) => {
+      this.tokenInfo();
+
+      if (response.status == 0) {
+        // this.snackBar.open('Saved Sucessfully');
+        this.utility.showSnackBar(this.snackBar, 'Save Successful');
+        // this.mintForm.reset();
+      }
+      else {
+        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+      }
+    })
+  }
+
+  onSubmitBurn() {
+    this.request = this.burnForm.value;
+    // this.request['userId'] = this.userId;
+    this.apiService.burnSave(this.request).subscribe((response: any) => {
+      this.tokenInfo();
+
+      if (response.status == 0) {
+        this.snackBar.open('Saved Sucessfully');
+        this.snackBar.dismiss;
+        // this.utility.showSnackBar(this.snackBar, 'Save Successful');
+        // this.mintForm.reset();
+      }
+      else {
+        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+      }
+    })
   }
 }
