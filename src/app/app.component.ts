@@ -174,12 +174,11 @@ export class AppComponent implements OnInit {
       this.tokenInfo();
 
       if (response.status == 0) {
-        // this.snackBar.open('Saved Sucessfully');
-        this.utility.showSnackBar(this.snackBar, 'Save Successful', 3000);
-        // this.mintForm.reset();
+        this.snackBar.open("Transfer Form Sucessfully", "X", { "duration": 3000 });
+        this.mintForm.reset();
       }
       else {
-        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+        this.snackBar.open("Transfer From failed", "X", { "duration": 3000 });
       }
     })
   }
@@ -189,14 +188,12 @@ export class AppComponent implements OnInit {
     // this.request['userId'] = this.userId;
     this.apiService.clientAccountBalanceSave(this.request).subscribe((response: any) => {
       this.tokenInfo();
-
       if (response.status == 0) {
-        // this.snackBar.open('Saved Sucessfully');
-        this.utility.showSnackBar(this.snackBar, 'Save Successful');
-        // this.mintForm.reset();
+        this.snackBar.open("Client Account Balance Sucessfully", "X", { "duration": 3000 });
+        this.mintForm.reset();
       }
       else {
-        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+        this.snackBar.open("Client Account Balance failed", "X", { "duration": 3000 });
       }
     })
   }
@@ -206,14 +203,12 @@ export class AppComponent implements OnInit {
     // this.request['userId'] = this.userId;
     this.apiService.BalanceOffSave(this.request).subscribe((response: any) => {
       this.tokenInfo();
-
       if (response.status == 0) {
-        // this.snackBar.open('Saved Sucessfully');
-        this.utility.showSnackBar(this.snackBar, 'Save Successful');
-        // this.mintForm.reset();
+        this.snackBar.open("Balance Off Sucessfully", "X", { "duration": 3000 });
+        this.mintForm.reset();
       }
       else {
-        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+        this.snackBar.open("Balance Off failed", "X", { "duration": 3000 });
       }
     })
   }
@@ -223,14 +218,12 @@ export class AppComponent implements OnInit {
     // this.request['userId'] = this.userId;
     this.apiService.transferSave(this.request).subscribe((response: any) => {
       this.tokenInfo();
-
       if (response.status == 0) {
-        // this.snackBar.open('Saved Sucessfully');
-        this.utility.showSnackBar(this.snackBar, 'Save Successful');
-        // this.mintForm.reset();
+        this.snackBar.open("Transfer Sucessfully", "X", { "duration": 3000 });
+        this.mintForm.reset();
       }
       else {
-        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+        this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
       }
     })
   }
@@ -240,15 +233,12 @@ export class AppComponent implements OnInit {
     // this.request['userId'] = this.userId;
     this.apiService.burnSave(this.request).subscribe((response: any) => {
       this.tokenInfo();
-
       if (response.status == 0) {
-        this.snackBar.open('Saved Sucessfully');
-        this.snackBar.dismiss;
-        // this.utility.showSnackBar(this.snackBar, 'Save Successful');
-        // this.mintForm.reset();
+        this.snackBar.open("Burn Sucessfully", "X", { "duration": 3000 });
+        this.mintForm.reset();
       }
       else {
-        this.utility.showSnackBar(this.snackBar, 'Save Unsuccessful');
+        this.snackBar.open("Burn failed", "X", { "duration": 3000 });
       }
     })
   }
