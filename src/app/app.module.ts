@@ -19,6 +19,8 @@ import { MatCardModule } from '@angular/material/card';
 import { TransferFromComponent } from './transfer-from/transfer-from.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { BurnDialogComponent } from './burn-dialog/burn-dialog.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import { BurnDialogComponent } from './burn-dialog/burn-dialog.component';
   imports: [
     BrowserModule,
     AppRoutingModule, HttpClientModule, BrowserAnimationsModule, MatTableModule,MatInputModule,MatButtonModule,MatPaginatorModule,
-    MatDialogModule,FormsModule, ReactiveFormsModule,MatSnackBarModule,MatIconModule,MatToolbarModule,MatCardModule
+    MatDialogModule,FormsModule, ReactiveFormsModule,MatSnackBarModule,MatIconModule,MatToolbarModule,MatCardModule,MatTabsModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

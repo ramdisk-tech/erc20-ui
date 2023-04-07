@@ -18,4 +18,9 @@ export class URLS {
    public static BALANCE_OFF = URLS.IP + "erc20/balanceOff";
    public static TRANSFER = URLS.IP + "erc20/transfer";
    public static BURN = URLS.IP + "erc20/burn";
+   public static TRANSACTIONS_LIST = URLS.IP + "erc20/transactions";
+
+   //app-user
+   public static ERC20_USERS = URLS.IP + "erc20/users";
+   public static APP_USER_SAVE = URLS.IP + "app-user/register";
 }

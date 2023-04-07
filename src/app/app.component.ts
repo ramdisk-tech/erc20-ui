@@ -13,6 +13,7 @@ import { TransferFromComponent } from './transfer-from/transfer-from.component';
 import { BurnDialogComponent } from './burn-dialog/burn-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Utility } from './utility';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  userDataSource = new MatTableDataSource();
+  transactionsDataSource = new MatTableDataSource();
   mintForm = new FormGroup({
     amount: new FormControl('', Validators.required),
   });
@@ -41,30 +44,75 @@ export class AppComponent implements OnInit {
   burnForm = new FormGroup({
     amount: new FormControl('', Validators.required),
   });
+  appUserForm = new FormGroup({
+    userName: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
+    role: new FormControl('', Validators.required),
+  });
 
   @ViewChild(MatSort, { static: false }) sort!: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  filterDataLength = -1;
+  public pageSize = 5;
+  public page = 1;
   dataSource = new MatTableDataSource();
   title = 'frontend';
   assets = [];
-  tokenColumns: string[] = ['id', 'name', 'symbol', 'type', 'created'];
+  // tokenColumns: string[] = ['id', 'userName', 'password', 'role'];
+  userColumns: string[] = ['id', 'userName', 'password', 'role', 'created'];
+  transactionsColumns: string[] = ['id', 'name','created'];
   response: any = [];
+  usersResponse: any = [];
+  transactionsResponse: any = [];
   showUi = false;
   utility: any;
+  roles = [{
+    name: 'Admin'
+  },
+  {
+    name: 'Client'
+  },
+  ]
 
   constructor(private _http: HttpClient, private dialog: MatDialog, private snackBar: MatSnackBar, private activatedRoute: ActivatedRoute,
     private apiService: ApiService,) {
-    this.tokenInfo();
+      this.utility=new Utility();
+      this.tokenInfo();
 
   }
   ngOnInit() {
 
   }
+
+  // ngAfterViewInit() {
+  //   this.userDataSource.sort = this.sort;
+  //   this.userDataSource.paginator = this.paginator;
+  // }
+
+  ngAfterViewInit() {
+    this.transactionsDataSource.sort = this.sort;
+    this.transactionsDataSource.paginator = this.paginator;
+  }
+
   tokenInfo() {
     this.apiService.tokenListById().subscribe((response: any) => {
       this.response = response;
       this.dataSource.data = response.data;
       console.log("token list : " + this.dataSource.data);
+      this.showUi = true;
+    });
+
+    this.apiService.erc20UsersList().subscribe((response: any) => {
+      this.usersResponse = response;
+      this.userDataSource.data = response;
+      console.log("user list : " + this.userDataSource);
+      this.showUi = true;
+    });
+
+    this.apiService.transactionsList(28).subscribe((response: any) => {
+      this.transactionsResponse = response;
+      this.transactionsDataSource.data = response;
+      console.log("user list : " + this.transactionsDataSource);
       this.showUi = true;
     });
   }
@@ -146,13 +194,29 @@ export class AppComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  ngAfterViewInit() {
-    console.log('after ininti');
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-  }
+  // ngAfterViewInit() {
+  //   console.log('after ininti');
+  //   this.dataSource.sort = this.sort;
+  //   this.dataSource.paginator = this.paginator;
+  // }
 
   request: any
+
+  onSubmitUser() {
+    this.request = this.appUserForm.value;
+    this.request['organizationId'] = 1610;
+    this.apiService.appUserSave(this.request).subscribe((response: any) => {
+      if (response.status == 0) {
+        this.utility.showSnackBar(this.snackBar, 'Token Created sucessfully');
+        // this.dialogRef.close(response);
+        this.appUserForm.reset();
+      }
+      else {
+        this.utility.showSnackBar(this.snackBar, 'Token Created Unsucessfully');
+        // this.dialogRef.close(response);
+      }
+    })
+  }
   onSubmit() {
     this.request = this.mintForm.value;
     this.apiService.mintSave(this.request).subscribe((response: any) => {
@@ -242,4 +306,5 @@ export class AppComponent implements OnInit {
       }
     })
   }
+
 }

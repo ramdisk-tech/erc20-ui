@@ -52,7 +52,15 @@ export class ApiService {
   burnSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.BURN, JSON.stringify(data), this.httpOptions)
   }
-  
+  transactionsList(data: any): Observable<any> {
+    return this.http.get<any>(URLS.TRANSACTIONS_LIST + "/" + data, this.httpOptions)
+  }
+  erc20UsersList(): Observable<any> {
+    return this.http.get<any>(URLS.ERC20_USERS, this.httpOptions)
+  }
+  appUserSave(data: any): Observable<any> {
+    return this.http.post<any>(URLS.APP_USER_SAVE, JSON.stringify(data), this.httpOptions)
+  }
 
 }
 
