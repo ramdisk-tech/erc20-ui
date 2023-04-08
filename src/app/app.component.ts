@@ -5,13 +5,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AssetDialogComponent } from './asset-dialog/asset-dialog.component';
 import { URLS } from './urls';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/api-service';
-import { TransferFromComponent } from './transfer-from/transfer-from.component';
-import { BurnDialogComponent } from './burn-dialog/burn-dialog.component';
-import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Utility } from './utility';
 
@@ -58,9 +54,8 @@ export class AppComponent implements OnInit {
   dataSource = new MatTableDataSource();
   title = 'frontend';
   assets = [];
-  // tokenColumns: string[] = ['id', 'userName', 'password', 'role'];
-  userColumns: string[] = ['id', 'userName', 'password', 'role', 'created'];
-  transactionsColumns: string[] = ['id', 'name','created'];
+  userColumns: string[] = ['id', 'userName', 'role', 'created'];
+  transactionsColumns: string[] = ['id', 'txId','blockId','payload'];
   response: any = [];
   usersResponse: any = [];
   transactionsResponse: any = [];
@@ -74,8 +69,7 @@ export class AppComponent implements OnInit {
   },
   ]
 
-  constructor(private _http: HttpClient, private dialog: MatDialog, private snackBar: MatSnackBar, private activatedRoute: ActivatedRoute,
-    private apiService: ApiService,) {
+  constructor(private snackBar: MatSnackBar,private apiService: ApiService,) {
       this.utility=new Utility();
       this.tokenInfo();
 
@@ -109,86 +103,15 @@ export class AppComponent implements OnInit {
       this.showUi = true;
     });
 
-    this.apiService.transactionsList(28).subscribe((response: any) => {
+    this.apiService.transactionsList().subscribe((response: any) => {
       this.transactionsResponse = response;
       this.transactionsDataSource.data = response;
       console.log("user list : " + this.transactionsDataSource);
       this.showUi = true;
     });
   }
-  editRow(asset: any, index: number) {
-    const dialogRef = this.dialog.open(AssetDialogComponent, {
-      width: '500px', height: '100vh', position: { right: '0' }, data: asset
-
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSource.data[index] = (result)
-        this.dataSource._updateChangeSubscription();
-      }
-    });
-  }
-  // delete(asset:any,index:number){
-  //   this._http.post<any>(URLS.DELETE,JSON.stringify({"id":asset.ID}),this.httpOptions).subscribe((data:any) => {
-  //     console.log(data);
-  //     this.dataSource.data.splice(index,1)
-  //     this.dataSource._updateChangeSubscription();
-  //     this.snackBar.open(asset.ID+ ' deleted', '', {duration:1000
-  //     });
-  //      })
-  // }
-  addNewAsset() {
-    const dialogRef = this.dialog.open(AssetDialogComponent, {
-      width: '500px', height: '100vh', position: { right: '0' },
-
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSource.data.push(result)
-        this.dataSource._updateChangeSubscription();
-      }
-    });
-  }
-
-  transferFromSave() {
-    // if (this.utility.getUserProfile().role===0) {
-    //   this.utility.showSnackBar(this.snackBar, " Deployments are not allowed for the test app")
-    //   return;
-    // }
-    const dialogRef = this.dialog.open(TransferFromComponent, {
-      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: {}
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.dataSource.data.push(result);
-        this.dataSource._updateChangeSubscription();
-      }
-    });
-  }
-
-  transferSave() {
-    const dialogRef = this.dialog.open(TransferDialogComponent, {
-      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: {}
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.dataSource.data.push(result);
-        this.dataSource._updateChangeSubscription();
-      }
-    });
-  }
-
-  burnSave() {
-    const dialogRef = this.dialog.open(BurnDialogComponent, {
-      width: '40vw', position: { right: '0' }, height: '100vh', autoFocus: false, data: {}
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.dataSource.data.push(result);
-        this.dataSource._updateChangeSubscription();
-      }
-    });
-  }
+ 
+    
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

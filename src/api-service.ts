@@ -17,7 +17,7 @@ export class ApiService {
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'token':'28'
+        'token': '28'
       })
     }
   }
@@ -52,8 +52,8 @@ export class ApiService {
   burnSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.BURN, JSON.stringify(data), this.httpOptions)
   }
-  transactionsList(data: any): Observable<any> {
-    return this.http.get<any>(URLS.TRANSACTIONS_LIST + "/" + data, this.httpOptions)
+  transactionsList(): Observable<any> {
+    return this.http.get<any>(URLS.TRANSACTIONS_LIST, this.httpOptions)
   }
   erc20UsersList(): Observable<any> {
     return this.http.get<any>(URLS.ERC20_USERS, this.httpOptions)
