@@ -1,12 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { URLS } from './urls';
-import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/api-service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Utility } from './utility';
@@ -41,7 +37,7 @@ export class AppComponent implements OnInit {
     amount: new FormControl('', Validators.required),
   });
   appUserForm = new FormGroup({
-    userName: new FormControl('', Validators.required),
+    username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
     role: new FormControl('', Validators.required),
   });
@@ -55,7 +51,7 @@ export class AppComponent implements OnInit {
   title = 'frontend';
   assets = [];
   userColumns: string[] = ['id', 'userName', 'role', 'created'];
-  transactionsColumns: string[] = ['id', 'txId','blockId','payload'];
+  transactionsColumns: string[] = ['id', 'txId', 'blockId', 'payload'];
   response: any = [];
   usersResponse: any = [];
   transactionsResponse: any = [];
@@ -68,61 +64,33 @@ export class AppComponent implements OnInit {
     name: 'Client'
   },
   ]
+  users:any=[];
 
-  constructor(private snackBar: MatSnackBar,private apiService: ApiService,) {
-      this.utility=new Utility();
-      this.tokenInfo();
+  constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
+    this.utility = new Utility();
+    
 
   }
   ngOnInit() {
 
   }
 
-  // ngAfterViewInit() {
-  //   this.userDataSource.sort = this.sort;
-  //   this.userDataSource.paginator = this.paginator;
-  // }
-
   ngAfterViewInit() {
     this.transactionsDataSource.sort = this.sort;
     this.transactionsDataSource.paginator = this.paginator;
   }
-
-  tokenInfo() {
-    this.apiService.tokenListById().subscribe((response: any) => {
-      this.response = response;
-      this.dataSource.data = response.data;
-      console.log("token list : " + this.dataSource.data);
-      this.showUi = true;
-    });
-
-    this.apiService.erc20UsersList().subscribe((response: any) => {
-      this.usersResponse = response;
-      this.userDataSource.data = response;
-      console.log("user list : " + this.userDataSource);
-      this.showUi = true;
-    });
-
-    this.apiService.transactionsList().subscribe((response: any) => {
-      this.transactionsResponse = response;
-      this.transactionsDataSource.data = response;
-      console.log("user list : " + this.transactionsDataSource);
-      this.showUi = true;
-    });
-  }
- 
-    
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  // ngAfterViewInit() {
-  //   console.log('after ininti');
-  //   this.dataSource.sort = this.sort;
-  //   this.dataSource.paginator = this.paginator;
-  // }
 
+  tokenInfo(){
+    this.apiService.tokenListById().subscribe((response: any) => {
+      this.response = response;
+      this.dataSource.data = response.data;
+      this.showUi = true;
+    });
+  }
   request: any
 
   onSubmitUser() {
@@ -229,5 +197,31 @@ export class AppComponent implements OnInit {
       }
     })
   }
-
+  onTabChanged(data:any){
+    console.log(data);
+    switch(data.index){
+      case 0:
+        console.log('index 0');
+        break;
+        case 1:
+          console.log('user');
+          this.apiService.erc20UsersList().subscribe((response: any) => {
+            this.usersResponse = response;
+            this.userDataSource.data = response;
+            response.forEach((element: any) => {
+              if (element.role === 'Admin') {
+                this.users.push(element);
+              }
+            });
+          });
+          break;
+          case 2:
+            this.apiService.transactionsList().subscribe((response: any) => {
+              this.transactionsResponse = response;
+              this.transactionsDataSource.data = response;
+              });
+              break;
+    }
+   
+  }
 }

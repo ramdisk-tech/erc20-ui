@@ -2,41 +2,41 @@
     <div style="width: 100%; text-align: center;">ERC-20 Integration</div>
 </mat-toolbar>
 <div style="max-width:1280px;margin: auto;">
-<mat-tab-group mat-stretch-tabs style="width: 100%;">
-    <mat-tab label="Functions">
-        <div class="row" style="margin-top: 30px; display: flex; justify-content:space-between 10px;">
-            <div class="col-lg-3">
-                <mat-card>
-                    <div>Name :
-                        {{response.name}}
-                    </div>
-                </mat-card>
-            </div>
+    <mat-tab-group mat-stretch-tabs style="width: 100%;" (selectedTabChange)="onTabChanged($event);">
+        <mat-tab label="Functions"  >
+            <div class="row" style="margin-top: 30px; display: flex; justify-content:space-between 10px;">
+                <div class="col-lg-3">
+                    <mat-card>
+                        <div>Name :
+                            {{response.name}}
+                        </div>
+                    </mat-card>
+                </div>
 
-            <div class="col-lg-3">
-                <mat-card>
-                    <div>Symbol :
-                        {{response.symbol}}
-                    </div>
-                </mat-card>
-            </div>
+                <div class="col-lg-3">
+                    <mat-card>
+                        <div>Symbol :
+                            {{response.symbol}}
+                        </div>
+                    </mat-card>
+                </div>
 
-            <div class="col-lg-3">
-                <mat-card>
-                    <div>Type :
-                        {{response.type}}
-                    </div>
-                </mat-card>
-            </div>
-            <div class="col-lg-3">
-                <mat-card>
-                    <div>Total supply :
-                        {{response.totalSupply}}
-                    </div>
-                </mat-card>
-            </div>
+                <div class="col-lg-3">
+                    <mat-card>
+                        <div>Type :
+                            {{response.type}}
+                        </div>
+                    </mat-card>
+                </div>
+                <div class="col-lg-3">
+                    <mat-card>
+                        <div>Total supply :
+                            {{response.totalSupply}}
+                        </div>
+                    </mat-card>
+                </div>
 
-            <!-- <div class="col-lg-3">
+                <!-- <div class="col-lg-3">
                       <mat-card>
                           <div>Created :
                             <span *ngIf="response.created!=null">{{utility.getDate(response.created)}}
@@ -44,222 +44,233 @@
                       </mat-card>
                     </div> -->
 
-        </div>
-        <div class="row" style="margin-bottom: 100px;margin-top: 50px;">
-            <div class="col-lg-6">
-                <h4>Admin Operations</h4>
-                <form [formGroup]="mintForm" (ngSubmit)="onSubmit()" style="padding: 10px;">
-                    <div style="margin-top: 10px;">
-                        <h4>Mint</h4>
-                        <div>
-                            <mat-form-field appearance="outline">
-                                <mat-label>Enter the token count</mat-label>
-                                <input matInput type="number" formControlName="amount" required>
-                            </mat-form-field>
-                            <button [disabled]="!mintForm.valid" style="margin-left: 20px;" mat-raised-button
-                                color="primary">
-                                Mint
-                            </button>
+            </div>
+            <div class="row" style="margin-bottom: 100px;margin-top: 50px;">
+                <div class="col-lg-6">
+                    <h4>Admin Operations</h4>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select user</mat-label>
+                        <mat-select >
+                            <mat-option *ngFor="let user of users" [value]="user.userName" single>
+                                {{user.userName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <form [formGroup]="mintForm" (ngSubmit)="onSubmit()" style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4>Mint</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Enter the token count</mat-label>
+                                    <input matInput type="number" formControlName="amount" required>
+                                </mat-form-field>
+                                <button [disabled]="!mintForm.valid" style="margin-left: 20px;" mat-raised-button
+                                    color="primary">
+                                    Mint
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
 
-                <form [formGroup]="transferFromForm" (ngSubmit)="onSubmitTransferFrom()" style="padding: 10px;">
+                    <form [formGroup]="transferFromForm" (ngSubmit)="onSubmitTransferFrom()" style="padding: 10px;">
+                        <div style="margin-top: 10px; width: 100%;">
+                            <h4>Transfer From</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Transfer From</mat-label>
+                                    <input matInput type="text" formControlName="from" required>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
+                                    <mat-label>Transfer To</mat-label>
+                                    <input matInput type="text" formControlName="to" required>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Amount</mat-label>
+                                    <input matInput type="number" formControlName="value" required>
+                                </mat-form-field>
+                                <button style="margin-left: 20px;" [disabled]="!transferFromForm.valid"
+                                    mat-raised-button color="primary">
+                                    Transfer From
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="onSubmitClientAccountBalance()"
+                        style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4>Client Account Balance</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Name Of The Client</mat-label>
+                                    <input matInput type="text" formControlName="name" required>
+                                </mat-form-field>
+                                <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;"
+                                    mat-raised-button color="primary">
+                                    Client Account Balance
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form [formGroup]="burnForm" (ngSubmit)="onSubmitBurn()" style="padding:10px;">
+                        <div style="margin-top:10px;">
+                            <h4>Burn</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Amount</mat-label>
+                                    <input matInput type="number" formControlName="amount" required>
+                                </mat-form-field>
+                                <button [disabled]="!burnForm.valid" style="margin-left: 20px;" mat-raised-button
+                                    color="primary">
+                                    Burn
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6">
+                    <h4>User Operations</h4>
+                    <form [formGroup]="BalanceOfForm" (ngSubmit)="onSubmitBalanceOff()" style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4> Get Balance</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Amount</mat-label>
+                                    <input matInput type="text" formControlName="user" required>
+                                </mat-form-field>
+                                <button [disabled]="!BalanceOfForm.valid" style="margin-left: 20px;" mat-raised-button
+                                    color="primary">
+                                    Balance Off
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form [formGroup]="transferForm" (ngSubmit)="onSubmitTransfer()" style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4>Transfer</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Transfer To</mat-label>
+                                    <input matInput type="text" formControlName="to" required>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="margin-left: 10px;">
+                                    <mat-label>Amount</mat-label>
+                                    <input matInput type="number" formControlName="value" required>
+                                </mat-form-field>
+                                <button [disabled]="!transferForm.valid" style="margin-left: 20px;" mat-raised-button
+                                    color="primary">
+                                    Transfer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Users">
+            <div class=" col-lg-12">
+                <form [formGroup]="appUserForm" (ngSubmit)="onSubmitUser()" style="padding: 10px; text-align: center;">
                     <div style="margin-top: 10px; width: 100%;">
-                        <h4>Transfer From</h4>
                         <div>
                             <mat-form-field appearance="outline">
-                                <mat-label>Transfer From</mat-label>
-                                <input matInput type="text" formControlName="from" required>
+                                <mat-label>User Name</mat-label>
+                                <input matInput type="text" formControlName="username" required>
                             </mat-form-field>
                             <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
-                                <mat-label>Transfer To</mat-label>
-                                <input matInput type="text" formControlName="to" required>
+                                <mat-label>Password</mat-label>
+                                <input matInput type="text" formControlName="password" required>
                             </mat-form-field>
                             <mat-form-field appearance="outline">
-                                <mat-label>Amount</mat-label>
-                                <input matInput type="number" formControlName="value" required>
+                                <mat-label>Role</mat-label>
+                                <mat-select required formControlName="role">
+                                    <mat-option *ngFor="let role of roles" [value]="role.name" single>
+                                        {{role.name}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
-                            <button style="margin-left: 20px;" [disabled]="!transferFromForm.valid" mat-raised-button
+                            <button style="margin-left: 20px;" [disabled]="!appUserForm.valid" mat-raised-button
                                 color="primary">
-                                Transfer From
+                                Enroll User
                             </button>
                         </div>
                     </div>
                 </form>
 
-                <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="onSubmitClientAccountBalance()"
-                    style="padding: 10px;">
-                    <div style="margin-top: 10px;">
-                        <h4>Client Account Balance</h4>
-                        <div>
-                            <mat-form-field appearance="outline">
-                                <mat-label>Name Of The Client</mat-label>
-                                <input matInput type="text" formControlName="name" required>
-                            </mat-form-field>
-                            <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;"
-                                mat-raised-button color="primary">
-                                Client Account Balance
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-                <form [formGroup]="burnForm" (ngSubmit)="onSubmitBurn()" style="padding:10px;">
-                    <div style="margin-top:10px;">
-                        <h4>Burn</h4>
-                        <div>
-                            <mat-form-field appearance="outline">
-                                <mat-label>Amount</mat-label>
-                                <input matInput type="number" formControlName="amount" required>
-                            </mat-form-field>
-                            <button [disabled]="!burnForm.valid" style="margin-left: 20px;" mat-raised-button
-                                color="primary">
-                                Burn
-                            </button>
-                        </div>
-                    </div>
-                </form>
             </div>
-            <div class="col-lg-6">
-                <h4>User Operations</h4>
-                <form [formGroup]="BalanceOfForm" (ngSubmit)="onSubmitBalanceOff()" style="padding: 10px;">
-                    <div style="margin-top: 10px;">
-                        <h4> Get Balance</h4>
-                        <div>
-                            <mat-form-field appearance="outline">
-                                <mat-label>Amount</mat-label>
-                                <input matInput type="text" formControlName="user" required>
-                            </mat-form-field>
-                            <button [disabled]="!BalanceOfForm.valid" style="margin-left: 20px;" mat-raised-button
-                                color="primary">
-                                Balance Off
-                            </button>
-                        </div>
-                    </div>
-                </form>
 
-                <form [formGroup]="transferForm" (ngSubmit)="onSubmitTransfer()" style="padding: 10px;">
-                    <div style="margin-top: 10px;">
-                        <h4>Transfer</h4>
-                        <div>
-                            <mat-form-field appearance="outline">
-                                <mat-label>Transfer To</mat-label>
-                                <input matInput type="text" formControlName="to" required>
-                            </mat-form-field>
-                            <mat-form-field appearance="outline" style="margin-left: 10px;">
-                                <mat-label>Amount</mat-label>
-                                <input matInput type="number" formControlName="value" required>
-                            </mat-form-field>
-                            <button [disabled]="!transferForm.valid" style="margin-left: 20px;" mat-raised-button
-                                color="primary">
-                                Transfer
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <div class="mat-elevation-z2" style="margin-top: 20px;">
+                <mat-card>
+                    <table mat-table [dataSource]="userDataSource" matSort
+                        style="width: 100%; margin-left: 30px; margin-right: 30px;">
+
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> S No </th>
+                            <td mat-cell *matCellDef="let row;let i=index"> {{i+1}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="userName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+                            <td mat-cell *matCellDef="let row"> {{row.userName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="role">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+                            <td mat-cell *matCellDef="let row"> {{row.role}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="created">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created</th>
+                            <td mat-cell *matCellDef="let row"><span
+                                    *ngIf="row.created!=null">{{utility.getDate(row.created)}}
+                                    {{utility.getTime(row.created)}}</span> </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: userColumns;"></tr>
+
+                    </table>
+                </mat-card>
+                <!-- <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
             </div>
-        </div>
-    </mat-tab>
 
-    <mat-tab label="Users">
-        <div class=" col-lg-12">
-            <form [formGroup]="appUserForm" (ngSubmit)="onSubmitUser()" style="padding: 10px; text-align: center;">
-                <div style="margin-top: 10px; width: 100%;">
-                    <div>
-                        <mat-form-field appearance="outline">
-                            <mat-label>User Name</mat-label>
-                            <input matInput type="text" formControlName="userName" required>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
-                            <mat-label>Password</mat-label>
-                            <input matInput type="text" formControlName="password" required>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline" >
-                            <mat-label>Role</mat-label>
-                            <mat-select required formControlName="role">
-                                <mat-option *ngFor="let role of roles" [value]="role.name" single>
-                                    {{role.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <button style="margin-left: 20px;" [disabled]="!appUserForm.valid" mat-raised-button
-                            color="primary">
-                            Enroll User
-                        </button>
-                    </div>
-                </div>
-            </form>
+        </mat-tab>
 
-        </div>
+        <mat-tab label="Transactions">
 
-        <div class="mat-elevation-z2" style="margin-top: 20px;">
-            <mat-card>
-                <table mat-table [dataSource]="userDataSource" matSort style="width: 100%; margin-left: 30px; margin-right: 30px;">
-    
+            <div class="mat-elevation-z2" style="margin-top: 20px;">
+                <table mat-table [dataSource]="transactionsDataSource" matSort
+                    style="width: 100%; margin-left: 30px; margin-right: 30px;">
+
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> S No </th>
                         <td mat-cell *matCellDef="let row;let i=index"> {{i+1}} </td>
                     </ng-container>
-    
-                    <ng-container matColumnDef="userName">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
-                        <td mat-cell *matCellDef="let row"> {{row.userName}} </td>
+
+                    <ng-container matColumnDef="txId">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Id </th>
+                        <td mat-cell *matCellDef="let row" style="margin-right: 10px;"> {{row.transactionId}} </td>
                     </ng-container>
-                    <ng-container matColumnDef="role">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-                        <td mat-cell *matCellDef="let row"> {{row.role}} </td>
+                    <ng-container matColumnDef="blockId">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 75px;"> Block Id </th>
+                        <td mat-cell *matCellDef="let row" style="width: 75px;margin-left: 10px;"> {{row.blockId}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="payload">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Payload </th>
+                        <td mat-cell *matCellDef="let row"> {{row.payload}} </td>
                     </ng-container>
                     <ng-container matColumnDef="created">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Created</th>
-                        <td mat-cell *matCellDef="let row"><span *ngIf="row.created!=null">{{utility.getDate(row.created)}}
+                        <td mat-cell *matCellDef="let row"><span
+                                *ngIf="row.created!=null">{{utility.getDate(row.created)}}
                                 {{utility.getTime(row.created)}}</span> </td>
                     </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: userColumns;"></tr>
-    
+                    <tr mat-header-row *matHeaderRowDef="transactionsColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: transactionsColumns;"></tr>
+
                 </table>
-            </mat-card>
-            <!-- <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator> -->
-        </div>
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+            </div>
 
-    </mat-tab>
-
-    <mat-tab label="Transactions">
-
-        <div class="mat-elevation-z2" style="margin-top: 20px;">
-            <table mat-table [dataSource]="transactionsDataSource" matSort style="width: 100%; margin-left: 30px; margin-right: 30px;">
-
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> S No </th>
-                    <td mat-cell *matCellDef="let row;let i=index"> {{i+1}} </td>
-                </ng-container>
-    
-                <ng-container matColumnDef="txId">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Transaction Id </th>
-                    <td mat-cell *matCellDef="let row" style="margin-right: 10px;"> {{row.transactionId}} </td>
-                </ng-container>
-                <ng-container matColumnDef="blockId">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 75px;"> Block Id </th>
-                    <td mat-cell *matCellDef="let row" style="width: 75px;margin-left: 10px;"> {{row.blockId}} </td>
-                </ng-container>
-                <ng-container matColumnDef="payload">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Payload </th>
-                    <td mat-cell *matCellDef="let row"> {{row.payload}} </td>
-                </ng-container>
-                <ng-container matColumnDef="created">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Created</th>
-                    <td mat-cell *matCellDef="let row"><span *ngIf="row.created!=null">{{utility.getDate(row.created)}}
-                            {{utility.getTime(row.created)}}</span> </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="transactionsColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: transactionsColumns;"></tr>
-    
-            </table>
-            <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-        </div>
-        
-    </mat-tab>
-</mat-tab-group>
+        </mat-tab>
+    </mat-tab-group>
 </div>
- 

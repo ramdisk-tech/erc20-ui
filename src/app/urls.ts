@@ -1,10 +1,5 @@
 export class URLS {
     private static IP = "http://localhost:8090/";
-    // private static IP = "https://restapi.localho.st/";
-    // public static LIST = URLS.IP + "list";
-    // public static CREATE = URLS.IP + "create";
-    // public static UPDATE = URLS.IP + "update";
-    // public static DELETE = URLS.IP + "delete";
 
     //Token
    public static TOKEN_LIST = URLS.IP + "token/listByNetworkId";
@@ -22,5 +17,5 @@ export class URLS {
 
    //app-user
    public static ERC20_USERS = URLS.IP + "erc20/users";
-   public static APP_USER_SAVE = URLS.IP + "app-user/register";
+   public static APP_USER_SAVE = URLS.IP + "erc20/enroll";
 }
