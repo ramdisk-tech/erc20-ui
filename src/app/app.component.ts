@@ -65,11 +65,14 @@ export class AppComponent implements OnInit {
   },
   ]
   users:any=[];
+  icon = 'visibility';
+  type = "password";
 
   constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
     this.utility = new Utility();
-    
-
+    this.apiService.appUserList().subscribe((data: any) => {
+      this.users = data;
+    });
   }
   ngOnInit() {
 
@@ -98,12 +101,12 @@ export class AppComponent implements OnInit {
     this.request['organizationId'] = 1610;
     this.apiService.appUserSave(this.request).subscribe((response: any) => {
       if (response.status == 0) {
-        this.utility.showSnackBar(this.snackBar, 'Token Created sucessfully');
+        this.utility.showSnackBar(this.snackBar, 'User Created sucessfully');
         // this.dialogRef.close(response);
         this.appUserForm.reset();
       }
       else {
-        this.utility.showSnackBar(this.snackBar, 'Token Created Unsucessfully');
+        this.utility.showSnackBar(this.snackBar, 'User Created Unsucessfully');
         // this.dialogRef.close(response);
       }
     })
@@ -206,8 +209,8 @@ export class AppComponent implements OnInit {
         case 1:
           console.log('user');
           this.apiService.erc20UsersList().subscribe((response: any) => {
-            this.usersResponse = response;
-            this.userDataSource.data = response;
+            this.usersResponse = response.list;
+            this.userDataSource.data = response.list;
             response.forEach((element: any) => {
               if (element.role === 'Admin') {
                 this.users.push(element);
@@ -223,5 +226,22 @@ export class AppComponent implements OnInit {
               break;
     }
    
+  }
+
+  onSelected(user: any) {
+    // if (event.isUserInput) {
+      // this.containerRegistryId = cr.containerRegistryId;
+      // console.log("event2 : " + cr.containerRegistryId);
+    // }
+  }
+
+  showOrHide() {
+    if (this.type == 'password') {
+      this.type = 'text'
+      this.icon = 'visibility_off'
+    } else {
+      this.type = 'password'
+      this.icon = 'visibility'
+    }
   }
 }

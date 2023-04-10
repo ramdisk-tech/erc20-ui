@@ -48,12 +48,18 @@
             <div class="row" style="margin-bottom: 100px;margin-top: 50px;">
                 <div class="col-lg-6">
                     <h4>Admin Operations</h4>
-                    <mat-form-field appearance="outline">
+                    <!-- <mat-form-field appearance="outline">
                         <mat-label>Select user</mat-label>
                         <mat-select >
                             <mat-option *ngFor="let user of users" [value]="user.userName" single>
                                 {{user.userName}}
                             </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select User</mat-label>
+                        <mat-select>
+                            <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}" *ngFor="let user of users">{{user.userName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <form [formGroup]="mintForm" (ngSubmit)="onSubmit()" style="padding: 10px;">
@@ -131,6 +137,13 @@
                 </div>
                 <div class="col-lg-6">
                     <h4>User Operations</h4>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Select User</mat-label>
+                        <mat-select>
+                            <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}" *ngFor="let user of users">{{user.userName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                     <form [formGroup]="BalanceOfForm" (ngSubmit)="onSubmitBalanceOff()" style="padding: 10px;">
                         <div style="margin-top: 10px;">
                             <h4> Get Balance</h4>
@@ -181,7 +194,8 @@
                             </mat-form-field>
                             <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
                                 <mat-label>Password</mat-label>
-                                <input matInput type="text" formControlName="password" required>
+                                <input matInput type="{{type}}" formControlName="password" required>
+                                <mat-icon (click)="showOrHide()" style="position: absolute;right: 0px;">{{icon}}</mat-icon>
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                                 <mat-label>Role</mat-label>

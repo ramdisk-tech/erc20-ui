@@ -18,4 +18,5 @@ export class URLS {
    //app-user
    public static ERC20_USERS = URLS.IP + "erc20/users";
    public static APP_USER_SAVE = URLS.IP + "erc20/enroll";
+   public static APP_USER_LIST = URLS.IP + "app-user/listAll";
 }
