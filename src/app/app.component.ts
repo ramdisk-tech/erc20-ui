@@ -53,7 +53,6 @@ export class AppComponent implements OnInit {
   userColumns: string[] = ['id', 'userName', 'role', 'created'];
   transactionsColumns: string[] = ['id', 'txId', 'blockId', 'payload'];
   response: any = [];
-  usersResponse: any = [];
   transactionsResponse: any = [];
   showUi = false;
   utility: any;
@@ -64,15 +63,17 @@ export class AppComponent implements OnInit {
     name: 'Client'
   },
   ]
-  users:any=[];
+  users: any = [];
+  admins: any = [];
   icon = 'visibility';
   type = "password";
 
   constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
     this.utility = new Utility();
-    this.apiService.appUserList().subscribe((data: any) => {
+    this.apiService.erc20UsersList().subscribe((data: any) => {
       this.users = data;
     });
+    this.tokenInfo();
   }
   ngOnInit() {
 
@@ -87,7 +88,7 @@ export class AppComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  tokenInfo(){
+  tokenInfo() {
     this.apiService.tokenListById().subscribe((response: any) => {
       this.response = response;
       this.dataSource.data = response.data;
@@ -200,38 +201,37 @@ export class AppComponent implements OnInit {
       }
     })
   }
-  onTabChanged(data:any){
+  onTabChanged(data: any) {
     console.log(data);
-    switch(data.index){
+    switch (data.index) {
       case 0:
         console.log('index 0');
         break;
-        case 1:
-          console.log('user');
-          this.apiService.erc20UsersList().subscribe((response: any) => {
-            this.usersResponse = response.list;
-            this.userDataSource.data = response.list;
-            response.forEach((element: any) => {
-              if (element.role === 'Admin') {
-                this.users.push(element);
-              }
-            });
+      case 1:
+        console.log('user');
+        this.apiService.erc20UsersList().subscribe((response: any) => {
+          this.userDataSource.data = response;
+          response.forEach((element: any) => {
+            if (element.role === 'Admin') {
+              this.users.push(element);
+            }
           });
-          break;
-          case 2:
-            this.apiService.transactionsList().subscribe((response: any) => {
-              this.transactionsResponse = response;
-              this.transactionsDataSource.data = response;
-              });
-              break;
+        });
+        break;
+      case 2:
+        this.apiService.transactionsList().subscribe((response: any) => {
+          this.transactionsResponse = response;
+          this.transactionsDataSource.data = response;
+        });
+        break;
     }
-   
+
   }
 
   onSelected(user: any) {
     // if (event.isUserInput) {
-      // this.containerRegistryId = cr.containerRegistryId;
-      // console.log("event2 : " + cr.containerRegistryId);
+    // this.containerRegistryId = cr.containerRegistryId;
+    // console.log("event2 : " + cr.containerRegistryId);
     // }
   }
 
