@@ -6,14 +6,22 @@ export class URLS {
    public static TOKEN_SAVE = URLS.IP + "token/save";
    public static TOKEN_DETAILS = URLS.IP + "erc20/info";
 
-   //erc20
-   public static MINT = URLS.IP + "erc20/mint";
-   public static TRANSFER_FROM = URLS.IP + "erc20/transferFrom";
+   //erc721
+   public static MINT = URLS.IP + "erc721/mint";
+   public static TRANSFER_FROM = URLS.IP + "erc721/transferFrom";
    public static CLIENT_ACCOUNT_BALANCE = URLS.IP + "erc20/clientAccountBalance";
-   public static BALANCE_OFF = URLS.IP + "erc20/balanceOff";
-   public static TRANSFER = URLS.IP + "erc20/transfer";
-   public static BURN = URLS.IP + "erc20/burn";
-   public static TRANSACTIONS_LIST = URLS.IP + "erc20/transactions";
+   public static BALANCE_OFF = URLS.IP + "erc721/balanceOff";
+   public static OWNER_OFF = URLS.IP + "erc721/ownerOff";
+   public static BURN = URLS.IP + "erc721/burn";
+   public static TOKEN_NAME = URLS.IP + "erc721/tokeName";
+   public static TOKEN_SYMBOL = URLS.IP + "erc721/tokenSymbol";
+   public static TOKEN_URI = URLS.IP + "erc721/tokenURI";
+   public static TOKEN_SUPPLY = URLS.IP + "erc721/totalSupply";
+   public static INITIALIZE = URLS.IP + "erc721/Initialize";
+   public static MINT_WITH_TOKEN_URI = URLS.IP + "erc721/MintWithTokenURI";
+   public static CLIENT_ACCOUNT_ID = URLS.IP + "erc721/ClientAccountID";
+   public static READ_NFT = URLS.IP + "erc721/readNft";
+   public static NFT_EXISTS = URLS.IP + "erc721/nftExists";
 
    //app-user
    public static ERC20_USERS = URLS.IP + "erc20/users";

@@ -145,16 +145,16 @@ export class AppComponent implements OnInit {
   onSubmitClientAccountBalance() {
     this.request = this.clientAccountBalanceForm.value;
     // this.request['userId'] = this.userId;
-    this.apiService.clientAccountBalanceSave(this.request).subscribe((response: any) => {
-      this.tokenInfo();
-      if (response.status == 0) {
-        this.snackBar.open("Client Account Balance Sucessfully", "X", { "duration": 3000 });
-        this.mintForm.reset();
-      }
-      else {
-        this.snackBar.open("Client Account Balance failed", "X", { "duration": 3000 });
-      }
-    })
+    // this.apiService.clientAccountBalanceSave(this.request).subscribe((response: any) => {
+    //   this.tokenInfo();
+    //   if (response.status == 0) {
+    //     this.snackBar.open("Client Account Balance Sucessfully", "X", { "duration": 3000 });
+    //     this.mintForm.reset();
+    //   }
+    //   else {
+    //     this.snackBar.open("Client Account Balance failed", "X", { "duration": 3000 });
+    //   }
+    // })
   }
 
   onSubmitBalanceOff() {
@@ -175,16 +175,16 @@ export class AppComponent implements OnInit {
   onSubmitTransfer() {
     this.request = this.transferForm.value;
     // this.request['userId'] = this.userId;
-    this.apiService.transferSave(this.request).subscribe((response: any) => {
-      this.tokenInfo();
-      if (response.status == 0) {
-        this.snackBar.open("Transfer Sucessfully", "X", { "duration": 3000 });
-        this.mintForm.reset();
-      }
-      else {
-        this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
-      }
-    })
+    // this.apiService.transferSave(this.request).subscribe((response: any) => {
+    //   this.tokenInfo();
+    //   if (response.status == 0) {
+    //     this.snackBar.open("Transfer Sucessfully", "X", { "duration": 3000 });
+    //     this.mintForm.reset();
+    //   }
+    //   else {
+    //     this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
+    //   }
+    // })
   }
 
   onSubmitBurn() {
@@ -219,10 +219,10 @@ export class AppComponent implements OnInit {
         });
         break;
       case 2:
-        this.apiService.transactionsList().subscribe((response: any) => {
-          this.transactionsResponse = response;
-          this.transactionsDataSource.data = response;
-        });
+        // this.apiService.transactionsList().subscribe((response: any) => {
+        //   this.transactionsResponse = response;
+        //   this.transactionsDataSource.data = response;
+        // });
         break;
     }
 
