@@ -3,9 +3,18 @@
 </mat-toolbar>
 <div style="max-width:1280px;margin: auto;">
     <mat-tab-group mat-stretch-tabs style="width: 100%;" (selectedTabChange)="onTabChanged($event);">
-        <mat-tab label="Functions"  >
-            <div class="row" style="margin-top: 30px; display: flex; justify-content:space-between 10px;">
-                <div class="col-lg-3">
+        <mat-tab label="Functions">
+            <div  style="margin-top: 30px;">
+                <div>   <mat-form-field appearance="outline">
+                    <mat-label>Select user</mat-label>
+                    <mat-select>
+                        <mat-option (onSelectionChange)="onUserSelect($event)" value="{{user.userName}}"
+                            *ngFor="let user of users">{{user.userName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+               <div class="row">
+                <div class="col-lg-2">
                     <mat-card>
                         <div>Name :
                             {{response.name}}
@@ -13,7 +22,7 @@
                     </mat-card>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <mat-card>
                         <div>Symbol :
                             {{response.symbol}}
@@ -21,48 +30,40 @@
                     </mat-card>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <mat-card>
                         <div>Type :
                             {{response.type}}
                         </div>
                     </mat-card>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <mat-card>
                         <div>Total supply :
                             {{response.totalSupply}}
                         </div>
                     </mat-card>
                 </div>
-
-                <!-- <div class="col-lg-3">
-                      <mat-card>
-                          <div>Created :
-                            <span *ngIf="response.created!=null">{{utility.getDate(response.created)}}
-                              {{utility.getTime(response.created)}}</span>          </div>
-                      </mat-card>
-                    </div> -->
+                <div class="col-lg-2">
+                    <mat-card>
+                        <div>Balance :
+                            {{response.balance}}
+                        </div>
+                    </mat-card>
+                </div>
+                <div>
+                    <button mat-raised-button color="primary" (click)="tokenInfo()">
+                        Get token info
+                    </button>
+                  </div>  
+               </div>
+             
 
             </div>
             <div class="row" style="margin-bottom: 100px;margin-top: 50px;">
-                <div class="col-lg-6">
-                    <h4>Admin Operations</h4>
-                    <!-- <mat-form-field appearance="outline">
-                        <mat-label>Select user</mat-label>
-                        <mat-select >
-                            <mat-option *ngFor="let user of users" [value]="user.userName" single>
-                                {{user.userName}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
-                    <mat-form-field appearance="outline">
-                        <mat-label>Select Admin</mat-label>
-                        <mat-select>
-                            <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}" *ngFor="let user of users">{{user.userName}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <form [formGroup]="mintForm" (ngSubmit)="onSubmit()" style="padding: 10px;">
+                <div class="col-lg-12">
+                  
+                    <form [formGroup]="mintForm" (ngSubmit)="mint()" style="padding: 10px;">
                         <div style="margin-top: 10px;">
                             <h4>Mint</h4>
                             <div>
@@ -77,7 +78,29 @@
                             </div>
                         </div>
                     </form>
-
+                    <form [formGroup]="transferForm" (ngSubmit)="transfer()" style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4>Transfer</h4>
+                            <div>
+                                
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Select User</mat-label>
+                                    <mat-select formControlName="to">
+                                        <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
+                                            *ngFor="let user of users">{{user.userName}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="margin-left: 10px;">
+                                    <mat-label>Amount</mat-label>
+                                    <input matInput type="number" formControlName="value" required>
+                                </mat-form-field>
+                                <button [disabled]="!transferForm.valid" style="margin-left: 20px;" mat-raised-button
+                                    color="primary">
+                                    Transfer
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                     <form [formGroup]="transferFromForm" (ngSubmit)="onSubmitTransferFrom()" style="padding: 10px;">
                         <div style="margin-top: 10px; width: 100%;">
                             <h4>Transfer From</h4>
@@ -102,22 +125,30 @@
                         </div>
                     </form>
 
-                    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="onSubmitClientAccountBalance()"
+                    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="getBalance()"
                         style="padding: 10px;">
                         <div style="margin-top: 10px;">
-                            <h4>Client Account Balance</h4>
+                            <h4>Account Balance</h4>
                             <div>
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Name Of The Client</mat-label>
-                                    <input matInput type="text" formControlName="name" required>
+                                    <mat-label>Select User</mat-label>
+                                    <mat-select formControlName="name">
+                                        <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
+                                            *ngFor="let user of users">{{user.userName}}</mat-option>
+                                    </mat-select>
                                 </mat-form-field>
                                 <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;"
                                     mat-raised-button color="primary">
-                                    Client Account Balance
+                                    Get Balance
                                 </button>
+                                
                             </div>
                         </div>
                     </form>
+                    <mat-form-field appearance="outline" >
+                        <mat-label>Balance</mat-label>
+                        <input matInput type="text" readonly="" [(ngModel)]="balance">
+                    </mat-form-field>  
 
                     <form [formGroup]="burnForm" (ngSubmit)="onSubmitBurn()" style="padding:10px;">
                         <div style="margin-top:10px;">
@@ -135,51 +166,6 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-lg-6">
-                    <h4>User Operations</h4>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Select User</mat-label>
-                        <mat-select>
-                            <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}" *ngFor="let user of users">{{user.userName}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <form [formGroup]="BalanceOfForm" (ngSubmit)="onSubmitBalanceOff()" style="padding: 10px;">
-                        <div style="margin-top: 10px;">
-                            <h4> Get Balance</h4>
-                            <div>
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Amount</mat-label>
-                                    <input matInput type="text" formControlName="user" required>
-                                </mat-form-field>
-                                <button [disabled]="!BalanceOfForm.valid" style="margin-left: 20px;" mat-raised-button
-                                    color="primary">
-                                    Balance Off
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form [formGroup]="transferForm" (ngSubmit)="onSubmitTransfer()" style="padding: 10px;">
-                        <div style="margin-top: 10px;">
-                            <h4>Transfer</h4>
-                            <div>
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Transfer To</mat-label>
-                                    <input matInput type="text" formControlName="to" required>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left: 10px;">
-                                    <mat-label>Amount</mat-label>
-                                    <input matInput type="number" formControlName="value" required>
-                                </mat-form-field>
-                                <button [disabled]="!transferForm.valid" style="margin-left: 20px;" mat-raised-button
-                                    color="primary">
-                                    Transfer
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         </mat-tab>
 
@@ -189,16 +175,17 @@
                     <div style="margin-top: 10px; width: 100%;">
                         <div>
                             <mat-form-field appearance="outline">
-                                <mat-label>User Name</mat-label>
+                                <mat-label>username</mat-label>
                                 <input matInput type="text" formControlName="username" required>
                             </mat-form-field>
                             <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
-                                <mat-label>Password</mat-label>
+                                <mat-label>password</mat-label>
                                 <input matInput type="{{type}}" formControlName="password" required>
-                                <mat-icon (click)="showOrHide()" style="position: absolute;right: 0px;">{{icon}}</mat-icon>
+                                <mat-icon (click)="showOrHide()"
+                                    style="position: absolute;right: 0px;">{{icon}}</mat-icon>
                             </mat-form-field>
                             <mat-form-field appearance="outline">
-                                <mat-label>Role</mat-label>
+                                <mat-label>role</mat-label>
                                 <mat-select required formControlName="role">
                                     <mat-option *ngFor="let role of roles" [value]="role.name" single>
                                         {{role.name}}

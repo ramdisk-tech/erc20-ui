@@ -17,7 +17,7 @@ export class ApiService {
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'token': '28'
+        'token': '0a461920-3d82-4635-ba71-126c96e585ae'
       })
     }
   }
@@ -29,24 +29,21 @@ export class ApiService {
   tokenSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.TOKEN_SAVE, JSON.stringify(data), this.httpOptions)
   }
-  tokenListById(): Observable<any> {
-    return this.http.get<any>(URLS.TOKEN_DETAILS, this.httpOptions)
+  tokenInfo(username:any): Observable<any> {
+    return this.http.get<any>(URLS.TOKEN_DETAILS+"/"+username, this.httpOptions)
   }
 
   //erc20
-  mintSave(data: any): Observable<any> {
+  mint(data: any): Observable<any> {
     return this.http.post<any>(URLS.MINT, JSON.stringify(data), this.httpOptions)
   }
   transferFromSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.TRANSFER_FROM, JSON.stringify(data), this.httpOptions)
   }
-  clientAccountBalanceSave(data: any): Observable<any> {
-    return this.http.post<any>(URLS.CLIENT_ACCOUNT_BALANCE, JSON.stringify(data), this.httpOptions)
+  balanceOff(data: any): Observable<any> {
+    return this.http.get<any>(URLS.BALANCE_OFF+"/"+data, this.httpOptions)
   }
-  BalanceOffSave(data: any): Observable<any> {
-    return this.http.post<any>(URLS.BALANCE_OFF, JSON.stringify(data), this.httpOptions)
-  }
-  transferSave(data: any): Observable<any> {
+  transfer(data: any): Observable<any> {
     return this.http.post<any>(URLS.TRANSFER, JSON.stringify(data), this.httpOptions)
   }
   burnSave(data: any): Observable<any> {
