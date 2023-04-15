@@ -106,12 +106,18 @@
                             <h4>Transfer From</h4>
                             <div>
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Transfer From</mat-label>
-                                    <input matInput type="text" formControlName="from" required>
+                                    <mat-label>Select User</mat-label>
+                                    <mat-select formControlName="from">
+                                        <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
+                                            *ngFor="let user of users">{{user.userName}}</mat-option>
+                                    </mat-select>
                                 </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left: 10px; margin-right: 10px;">
-                                    <mat-label>Transfer To</mat-label>
-                                    <input matInput type="text" formControlName="to" required>
+                                <mat-form-field appearance="outline" style="margin: 0px 15px;">
+                                    <mat-label>Select User</mat-label>
+                                    <mat-select formControlName="to">
+                                        <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
+                                            *ngFor="let user of users">{{user.userName}}</mat-option>
+                                    </mat-select>
                                 </mat-form-field>
                                 <mat-form-field appearance="outline">
                                     <mat-label>Amount</mat-label>
@@ -244,7 +250,9 @@
 
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> S No </th>
-                        <td mat-cell *matCellDef="let row;let i=index"> {{i+1}} </td>
+                        <!-- <td mat-cell *matCellDef="let row;let i=index"> {{i+1}} </td> -->
+                        <td mat-cell *matCellDef="let row;let i=index"> {{(i+1)+ (paginator.pageIndex *
+                            paginator.pageSize)}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="txId">
@@ -257,7 +265,7 @@
                     </ng-container>
                     <ng-container matColumnDef="payload">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Payload </th>
-                        <td mat-cell *matCellDef="let row"> {{row.payload}} </td>
+                        <td mat-cell *matCellDef="let row"> {{convert(row.payload)}} </td>
                     </ng-container>
                     <ng-container matColumnDef="created">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Created</th>

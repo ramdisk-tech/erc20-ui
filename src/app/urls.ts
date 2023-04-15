@@ -1,9 +1,8 @@
 export class URLS {
     private static IP = "http://localhost:8090/";
+  public static API_KEY='ICuBDY9epkN2np8UIJaILA==';
+ public static  TOKEN_ID='0a461920-3d82-4635-ba71-126c96e585ae';
 
-    //Token
-   public static TOKEN_LIST = URLS.IP + "token/listByNetworkId";
-   public static TOKEN_SAVE = URLS.IP + "token/save";
    public static TOKEN_DETAILS = URLS.IP + "erc20/info";
 
    //erc20
@@ -18,5 +17,4 @@ export class URLS {
    //app-user
    public static ERC20_USERS = URLS.IP + "erc20/users";
    public static APP_USER_SAVE = URLS.IP + "erc20/enroll";
-   public static APP_USER_LIST = URLS.IP + "app-user/listAll";
-}
+ }

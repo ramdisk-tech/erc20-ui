@@ -64,21 +64,14 @@ export class AppComponent implements OnInit {
   ]
   users: any = [];
   // allUsers: any = [];
-   icon = 'visibility';
+  icon = 'visibility';
   type = "password";
   selectedUser = null;
   balance: any;
   constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
     this.utility = new Utility();
-    this.apiService.erc20UsersList().subscribe((data: any) => {
+    this.apiService.users().subscribe((data: any) => {
       this.users = data;
-      // data.forEach((user: any) => {
-      //   if (user.role === 'admin') {
-      //     this.admins.push(user);
-      //   } else {
-      //     this.users.push(user);
-      //   }
-      // });
     });
   }
   ngOnInit() {
@@ -91,7 +84,7 @@ export class AppComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-   }
+  }
 
   tokenInfo() {
     if (!this.checkUserSelection()) {
@@ -100,7 +93,7 @@ export class AppComponent implements OnInit {
     console.log(this.selectedUser);
     this.apiService.tokenInfo(this.selectedUser).subscribe((response: any) => {
       this.response = response;
-       this.showUi = true;
+      this.showUi = true;
     });
   }
   request: any
@@ -124,7 +117,6 @@ export class AppComponent implements OnInit {
     this.request = this.mintForm.value;
     this.request['username'] = this.selectedUser;
     this.apiService.mint(this.request).subscribe((response: any) => {
-      this.tokenInfo();
       if (response.status == 0) {
         this.snackBar.open("Minted Sucessfully", "X", { "duration": 3000 });
         this.mintForm.reset();
@@ -137,16 +129,13 @@ export class AppComponent implements OnInit {
 
   onSubmitTransferFrom() {
     this.request = this.transferFromForm.value;
-    // this.request['userId'] = this.userId;
-    this.apiService.transferFromSave(this.request).subscribe((response: any) => {
-      this.tokenInfo();
-
+    this.apiService.transfer(this.request).subscribe((response: any) => {
       if (response.status == 0) {
-        this.snackBar.open("Transfer Form Sucessfully", "X", { "duration": 3000 });
-        this.mintForm.reset();
+        this.snackBar.open("Transfer sucess", "X", { "duration": 3000 });
+        this.transferFromForm.reset();
       }
       else {
-        this.snackBar.open("Transfer From failed", "X", { "duration": 3000 });
+        this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
       }
     })
   }
@@ -166,9 +155,7 @@ export class AppComponent implements OnInit {
 
   onSubmitBalanceOff() {
     this.request = this.BalanceOfForm.value;
-    // this.request['userId'] = this.userId;
     this.apiService.balanceOff(this.request).subscribe((response: any) => {
-      this.tokenInfo();
       if (response.status == 0) {
         this.snackBar.open("Balance Off Sucessfully", "X", { "duration": 3000 });
         this.mintForm.reset();
@@ -214,21 +201,15 @@ export class AppComponent implements OnInit {
     console.log(data);
     switch (data.index) {
       case 0:
-        console.log('index 0');
         break;
       case 1:
-        console.log('user');
-        this.apiService.erc20UsersList().subscribe((response: any) => {
+        this.apiService.users().subscribe((response: any) => {
           this.userDataSource.data = response;
-          response.forEach((element: any) => {
-            if (element.role === 'Admin') {
-              this.users.push(element);
-            }
-          });
+          this.users.push = response;
         });
         break;
       case 2:
-        this.apiService.transactionsList().subscribe((response: any) => {
+        this.apiService.transactions().subscribe((response: any) => {
           this.transactionsResponse = response;
           this.transactionsDataSource.data = response;
         });
@@ -238,7 +219,7 @@ export class AppComponent implements OnInit {
   }
 
   onSelected(user: any) {
-   
+
   }
 
   showOrHide() {
@@ -251,9 +232,9 @@ export class AppComponent implements OnInit {
     }
   }
   onUserSelect(event: any) {
-      if (event.isUserInput) {
+    if (event.isUserInput) {
       this.selectedUser = event.source.value
-      console.log(this.selectedUser );
+      console.log(this.selectedUser);
     }
   }
   checkUserSelection(): boolean {
@@ -263,5 +244,8 @@ export class AppComponent implements OnInit {
     } else {
       return true;
     }
+  }
+  convert(payload: any) {
+    return JSON.stringify(payload)
   }
 }
