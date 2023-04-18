@@ -68,11 +68,22 @@ export class AppComponent implements OnInit {
   type = "password";
   selectedUser = null;
   balance: any;
+  clientBalance: any;
   constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
     this.utility = new Utility();
     this.apiService.users().subscribe((data: any) => {
       this.users = data;
     });
+    this.clientBalance = 0
+    this.apiService.clientAccountBalance(56).subscribe((response: any) => {
+      if (response.status == 0) {
+        // this.clientAccountBalanceForm.reset();
+        this.clientBalance = response.balance;
+      }
+      else {
+        this.snackBar.open("Unable to get the balance", "X", { "duration": 3000 });
+      }
+    })
   }
   ngOnInit() {
 
@@ -100,15 +111,15 @@ export class AppComponent implements OnInit {
 
   onSubmitUser() {
     this.request = this.appUserForm.value;
-    this.apiService.appUserSave(this.request).subscribe((response: any) => {
-      if (response.status == 0) {
-        this.utility.showSnackBar(this.snackBar, 'User Created sucessfully');
-        this.appUserForm.reset();
-      }
-      else {
-        this.utility.showSnackBar(this.snackBar, 'User Created Unsucessfully');
-      }
-    })
+    // this.apiService.appUserSave(this.request).subscribe((response: any) => {
+    //   if (response.status == 0) {
+    //     this.utility.showSnackBar(this.snackBar, 'User Created sucessfully');
+    //     this.appUserForm.reset();
+    //   }
+    //   else {
+    //     this.utility.showSnackBar(this.snackBar, 'User Created Unsucessfully');
+    //   }
+    // })
   }
   mint() {
     if (!this.checkUserSelection()) {

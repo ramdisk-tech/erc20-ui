@@ -24,7 +24,7 @@ export class ApiService {
     return this.http.get<any>(URLS.TOKEN_DETAILS+"/"+username, this.httpOptions)
   }
 
-  //erc20
+  //erc1155
   mint(data: any): Observable<any> {
     return this.http.post<any>(URLS.MINT, JSON.stringify(data), this.httpOptions)
   }
@@ -33,6 +33,9 @@ export class ApiService {
   }
   balanceOff(data: any): Observable<any> {
     return this.http.get<any>(URLS.BALANCE_OFF+"/"+data, this.httpOptions)
+  }
+  clientAccountBalance(data: any): Observable<any> {
+    return this.http.get<any>(URLS.CLIENT_ACCOUNT_BALANCE+"/"+data, this.httpOptions)
   }
   transfer(data: any): Observable<any> {
     return this.http.post<any>(URLS.TRANSFER, JSON.stringify(data), this.httpOptions)
@@ -44,11 +47,11 @@ export class ApiService {
     return this.http.get<any>(URLS.TRANSACTIONS_LIST, this.httpOptions)
   }
   users(): Observable<any> {
-    return this.http.get<any>(URLS.ERC20_USERS, this.httpOptions)
+    return this.http.get<any>(URLS.ERC1155_USERS, this.httpOptions)
   }
-  appUserSave(data: any): Observable<any> {
-    return this.http.post<any>(URLS.APP_USER_SAVE, JSON.stringify(data), this.httpOptions)
-  }
+  // appUserSave(data: any): Observable<any> {
+  //   return this.http.post<any>(URLS.APP_USER_SAVE, JSON.stringify(data), this.httpOptions)
+  // }
 
 }
 
