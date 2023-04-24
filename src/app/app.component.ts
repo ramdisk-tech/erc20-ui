@@ -47,7 +47,6 @@ export class AppComponent implements OnInit {
   filterDataLength = -1;
   public pageSize = 5;
   public page = 1;
-  dataSource = new MatTableDataSource();
   title = 'frontend';
   assets = [];
   userColumns: string[] = ['id', 'userName', 'role', 'created'];
@@ -57,23 +56,23 @@ export class AppComponent implements OnInit {
   showUi = false;
   utility: any;
   roles = [{
-    name: 'Admin'
+    name: 'admin'
   },
   {
-    name: 'Client'
+    name: 'client'
   },
   ]
   users: any = [];
-  admins: any = [];
+  // allUsers: any = [];
   icon = 'visibility';
   type = "password";
-
+  selectedUser = null;
+  balance: any;
   constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
     this.utility = new Utility();
-    this.apiService.erc20UsersList().subscribe((data: any) => {
+    this.apiService.users().subscribe((data: any) => {
       this.users = data;
     });
-    this.tokenInfo();
   }
   ngOnInit() {
 
@@ -85,13 +84,15 @@ export class AppComponent implements OnInit {
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   tokenInfo() {
-    this.apiService.tokenListById().subscribe((response: any) => {
+    if (!this.checkUserSelection()) {
+      return;
+    }
+    console.log(this.selectedUser);
+    this.apiService.tokenInfo(this.selectedUser).subscribe((response: any) => {
       this.response = response;
-      this.dataSource.data = response.data;
       this.showUi = true;
     });
   }
@@ -99,23 +100,24 @@ export class AppComponent implements OnInit {
 
   onSubmitUser() {
     this.request = this.appUserForm.value;
-    this.request['organizationId'] = 1610;
     this.apiService.appUserSave(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.utility.showSnackBar(this.snackBar, 'User Created sucessfully');
-        // this.dialogRef.close(response);
         this.appUserForm.reset();
       }
       else {
         this.utility.showSnackBar(this.snackBar, 'User Created Unsucessfully');
-        // this.dialogRef.close(response);
       }
     })
   }
-  onSubmit() {
+
+  mint() {
+    if (!this.checkUserSelection()) {
+      return;
+    }
     this.request = this.mintForm.value;
-    this.apiService.mintSave(this.request).subscribe((response: any) => {
-      this.tokenInfo();
+    this.request['username'] = this.selectedUser;
+    this.apiService.mint(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.snackBar.open("Minted Sucessfully", "X", { "duration": 3000 });
         this.mintForm.reset();
@@ -128,40 +130,33 @@ export class AppComponent implements OnInit {
 
   onSubmitTransferFrom() {
     this.request = this.transferFromForm.value;
-    // this.request['userId'] = this.userId;
-    this.apiService.transferFromSave(this.request).subscribe((response: any) => {
-      this.tokenInfo();
-
+    this.apiService.transfer(this.request).subscribe((response: any) => {
       if (response.status == 0) {
-        this.snackBar.open("Transfer Form Sucessfully", "X", { "duration": 3000 });
-        this.mintForm.reset();
+        this.snackBar.open("Transfer sucess", "X", { "duration": 3000 });
+        this.transferFromForm.reset();
       }
       else {
-        this.snackBar.open("Transfer From failed", "X", { "duration": 3000 });
+        this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
       }
     })
   }
 
-  onSubmitClientAccountBalance() {
-    this.request = this.clientAccountBalanceForm.value;
-    // this.request['userId'] = this.userId;
-    // this.apiService.clientAccountBalanceSave(this.request).subscribe((response: any) => {
-    //   this.tokenInfo();
-    //   if (response.status == 0) {
-    //     this.snackBar.open("Client Account Balance Sucessfully", "X", { "duration": 3000 });
-    //     this.mintForm.reset();
-    //   }
-    //   else {
-    //     this.snackBar.open("Client Account Balance failed", "X", { "duration": 3000 });
-    //   }
-    // })
+  getBalance() {
+    this.balance = 0
+    this.apiService.balanceOff(this.clientAccountBalanceForm.value.name).subscribe((response: any) => {
+      if (response.status == 0) {
+        this.clientAccountBalanceForm.reset();
+        this.balance = response.balance;
+      }
+      else {
+        this.snackBar.open("Unable to get the balance", "X", { "duration": 3000 });
+      }
+    })
   }
 
   onSubmitBalanceOff() {
     this.request = this.BalanceOfForm.value;
-    // this.request['userId'] = this.userId;
-    this.apiService.BalanceOffSave(this.request).subscribe((response: any) => {
-      this.tokenInfo();
+    this.apiService.balanceOff(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.snackBar.open("Balance Off Sucessfully", "X", { "duration": 3000 });
         this.mintForm.reset();
@@ -172,19 +167,21 @@ export class AppComponent implements OnInit {
     })
   }
 
-  onSubmitTransfer() {
+  transfer() {
+    if (!this.checkUserSelection()) {
+      return;
+    }
     this.request = this.transferForm.value;
-    // this.request['userId'] = this.userId;
-    // this.apiService.transferSave(this.request).subscribe((response: any) => {
-    //   this.tokenInfo();
-    //   if (response.status == 0) {
-    //     this.snackBar.open("Transfer Sucessfully", "X", { "duration": 3000 });
-    //     this.mintForm.reset();
-    //   }
-    //   else {
-    //     this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
-    //   }
-    // })
+    this.request['from'] = this.selectedUser;
+    this.apiService.transfer(this.request).subscribe((response: any) => {
+      if (response.status == 0) {
+        this.snackBar.open("Transfer Sucessfully", "X", { "duration": 3000 });
+        this.transferForm.reset();
+      }
+      else {
+        this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
+      }
+    })
   }
 
   onSubmitBurn() {
@@ -205,34 +202,25 @@ export class AppComponent implements OnInit {
     console.log(data);
     switch (data.index) {
       case 0:
-        console.log('index 0');
         break;
       case 1:
-        console.log('user');
-        this.apiService.erc20UsersList().subscribe((response: any) => {
+        this.apiService.users().subscribe((response: any) => {
           this.userDataSource.data = response;
-          response.forEach((element: any) => {
-            if (element.role === 'Admin') {
-              this.users.push(element);
-            }
-          });
+          this.users.push = response;
         });
         break;
       case 2:
-        // this.apiService.transactionsList().subscribe((response: any) => {
-        //   this.transactionsResponse = response;
-        //   this.transactionsDataSource.data = response;
-        // });
+        this.apiService.transactions().subscribe((response: any) => {
+          this.transactionsResponse = response;
+          this.transactionsDataSource.data = response;
+        });
         break;
     }
 
   }
 
   onSelected(user: any) {
-    // if (event.isUserInput) {
-    // this.containerRegistryId = cr.containerRegistryId;
-    // console.log("event2 : " + cr.containerRegistryId);
-    // }
+
   }
 
   showOrHide() {
@@ -244,4 +232,22 @@ export class AppComponent implements OnInit {
       this.icon = 'visibility'
     }
   }
+  onUserSelect(event: any) {
+    if (event.isUserInput) {
+      this.selectedUser = event.source.value
+      console.log(this.selectedUser);
+    }
+  }
+  checkUserSelection(): boolean {
+    if (!this.selectedUser) {
+      this.snackBar.open("Please select the user", "X", { "duration": 3000 });
+      return false;
+    } else {
+      return true;
+    }
+  }
+  convert(payload: any) {
+    return JSON.stringify(payload)
+  }
+
 }
