@@ -68,8 +68,12 @@
                             <h4>Mint</h4>
                             <div>
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Enter the token count</mat-label>
-                                    <input matInput type="number" formControlName="amount" required>
+                                    <mat-label>Enter the token Id</mat-label>
+                                    <input matInput type="text" formControlName="tokenId" required>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="margin-left: 30px;">
+                                    <mat-label>Enter the token URI</mat-label>
+                                    <input matInput type="text" formControlName="tokenURI" required>
                                 </mat-form-field>
                                 <button [disabled]="!mintForm.valid" style="margin-left: 20px;" mat-raised-button
                                     color="primary">

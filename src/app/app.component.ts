@@ -16,7 +16,8 @@ export class AppComponent implements OnInit {
   userDataSource = new MatTableDataSource();
   transactionsDataSource = new MatTableDataSource();
   mintForm = new FormGroup({
-    amount: new FormControl('', Validators.required),
+    tokenId: new FormControl('', Validators.required),
+    tokenURI: new FormControl('', Validators.required),
   });
   transferFromForm = new FormGroup({
     from: new FormControl('', Validators.required),
@@ -116,7 +117,7 @@ export class AppComponent implements OnInit {
       return;
     }
     this.request = this.mintForm.value;
-    this.request['username'] = this.selectedUser;
+    // this.request['username'] = this.selectedUser;
     this.apiService.mint(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.snackBar.open("Minted Sucessfully", "X", { "duration": 3000 });

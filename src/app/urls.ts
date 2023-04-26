@@ -6,7 +6,7 @@ export class URLS {
    public static TOKEN_DETAILS = URLS.IP + "erc721/info";
 
    //erc20
-   public static MINT = URLS.IP + "erc721/mint";
+   public static MINT = URLS.IP + "erc721/MintWithTokenURI";
    public static TRANSFER_FROM = URLS.IP + "erc721/transferFrom";
    public static CLIENT_ACCOUNT_BALANCE = URLS.IP + "erc721/clientAccountBalance";
    public static BALANCE_OFF = URLS.IP + "erc721/balanceOff";
