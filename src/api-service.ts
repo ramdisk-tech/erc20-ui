@@ -31,14 +31,20 @@ export class ApiService {
   mint(data: any): Observable<any> {
     return this.http.post<any>(URLS.MINT, JSON.stringify(data), this.httpOptions)
   }
+  initialize(data: any): Observable<any> {
+    return this.http.post<any>(URLS.INITIALIZE, JSON.stringify(data), this.httpOptions)
+  }
+  ownerOff(data: any): Observable<any> {
+    return this.http.get<any>(URLS.OWNER_OFF+"/"+data, this.httpOptions)
+  }
   transferFromSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.TRANSFER_FROM, JSON.stringify(data), this.httpOptions)
   }
   balanceOff(data: any): Observable<any> {
     return this.http.get<any>(URLS.BALANCE_OFF+"/"+data, this.httpOptions)
   }
-  transfer(data: any): Observable<any> {
-    return this.http.post<any>(URLS.TRANSFER, JSON.stringify(data), this.httpOptions)
+  clientAccountBalance(data: any): Observable<any> {
+    return this.http.get<any>(URLS.CLIENT_ACCOUNT_BALANCE+"/"+data, this.httpOptions)
   }
   burnSave(data: any): Observable<any> {
     return this.http.post<any>(URLS.BURN, JSON.stringify(data), this.httpOptions)
