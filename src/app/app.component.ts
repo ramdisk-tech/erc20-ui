@@ -19,6 +19,10 @@ export class AppComponent implements OnInit {
     tokenId: new FormControl('', Validators.required),
     tokenURI: new FormControl('', Validators.required),
   });
+  initializeForm = new FormGroup({
+    name: new FormControl('', Validators.required),
+    symbol: new FormControl('', Validators.required),
+  });
   transferFromForm = new FormGroup({
     from: new FormControl('', Validators.required),
     to: new FormControl('', Validators.required),
@@ -32,10 +36,10 @@ export class AppComponent implements OnInit {
     value: new FormControl('', Validators.required),
   });
   BalanceOfForm = new FormGroup({
-    user: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
   });
   burnForm = new FormGroup({
-    amount: new FormControl('', Validators.required),
+    tokenId: new FormControl('', Validators.required),
   });
   appUserForm = new FormGroup({
     username: new FormControl('', Validators.required),
@@ -69,6 +73,8 @@ export class AppComponent implements OnInit {
   type = "password";
   selectedUser = null;
   balance: any;
+  owner: any;
+  clientBalance: any;
   constructor(private snackBar: MatSnackBar, private apiService: ApiService,) {
     this.utility = new Utility();
     this.apiService.users().subscribe((data: any) => {
@@ -117,7 +123,7 @@ export class AppComponent implements OnInit {
       return;
     }
     this.request = this.mintForm.value;
-    // this.request['username'] = this.selectedUser;
+    this.request['username'] = this.selectedUser;
     this.apiService.mint(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.snackBar.open("Minted Sucessfully", "X", { "duration": 3000 });
@@ -129,9 +135,27 @@ export class AppComponent implements OnInit {
     })
   }
 
+  initialize() {
+    if (!this.checkUserSelection()) {
+      return;
+    }
+    this.request = this.initializeForm.value;
+    this.request['username'] = this.selectedUser;
+    this.apiService.initialize(this.request).subscribe((response: any) => {
+      if (response.status == 0) {
+        this.snackBar.open("Initialization Sucessfully", "X", { "duration": 3000 });
+        this.initializeForm.reset();
+      }
+      else {
+        this.snackBar.open("Initialization failed", "X", { "duration": 3000 });
+      }
+    })
+  }
+
   onSubmitTransferFrom() {
     this.request = this.transferFromForm.value;
-    this.apiService.transfer(this.request).subscribe((response: any) => {
+    this.request['username'] = this.selectedUser;
+    this.apiService.transferFromSave(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.snackBar.open("Transfer sucess", "X", { "duration": 3000 });
         this.transferFromForm.reset();
@@ -144,13 +168,39 @@ export class AppComponent implements OnInit {
 
   getBalance() {
     this.balance = 0
-    this.apiService.balanceOff(this.clientAccountBalanceForm.value.name).subscribe((response: any) => {
+    this.apiService.balanceOff(this.selectedUser).subscribe((response: any) => {
       if (response.status == 0) {
-        this.clientAccountBalanceForm.reset();
+        this.BalanceOfForm.reset();
         this.balance = response.balance;
       }
       else {
         this.snackBar.open("Unable to get the balance", "X", { "duration": 3000 });
+      }
+    })
+  }
+
+  getClientAccountBalance() {
+    this.clientBalance = 0
+    this.apiService.clientAccountBalance(this.selectedUser).subscribe((response: any) => {
+      if (response.status == 0) {
+        this.clientAccountBalanceForm.reset();
+        this.clientBalance = response.clientAccountBalance;
+      }
+      else {
+        this.snackBar.open("Unable to get the balance", "X", { "duration": 3000 });
+      }
+    })
+  }
+
+  getOwner() {
+    this.owner = 0
+    this.apiService.ownerOff(this.selectedUser).subscribe((response: any) => {
+      if (response.status == 0) {
+        this.clientAccountBalanceForm.reset();
+        this.owner = response.owner;
+      }
+      else {
+        this.snackBar.open("Unable to get the owner balance", "X", { "duration": 3000 });
       }
     })
   }
@@ -168,26 +218,9 @@ export class AppComponent implements OnInit {
     })
   }
 
-  transfer() {
-    if (!this.checkUserSelection()) {
-      return;
-    }
-    this.request = this.transferForm.value;
-    this.request['from'] = this.selectedUser;
-    this.apiService.transfer(this.request).subscribe((response: any) => {
-      if (response.status == 0) {
-        this.snackBar.open("Transfer Sucessfully", "X", { "duration": 3000 });
-        this.transferForm.reset();
-      }
-      else {
-        this.snackBar.open("Transfer failed", "X", { "duration": 3000 });
-      }
-    })
-  }
-
   onSubmitBurn() {
     this.request = this.burnForm.value;
-    // this.request['userId'] = this.userId;
+    this.request['username'] = this.selectedUser;
     this.apiService.burnSave(this.request).subscribe((response: any) => {
       this.tokenInfo();
       if (response.status == 0) {

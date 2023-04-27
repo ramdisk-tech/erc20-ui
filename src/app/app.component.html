@@ -51,7 +51,21 @@
                         </div>
                     </mat-card>
                 </div>
-                <div>
+                <div class="col-lg-2">
+                    <mat-card>
+                        <div>Token URI :
+                            {{response.tokenURI}}
+                        </div>
+                    </mat-card>
+                </div>
+                <!-- <div class="col-lg-2">
+                    <mat-card>
+                        <div>Initialize :
+                            {{response.initialize}}
+                        </div>
+                    </mat-card>
+                </div> -->
+                <div style="margin-top: 30px;">
                     <button mat-raised-button color="primary" (click)="tokenInfo()">
                         Get token info
                     </button>
@@ -62,6 +76,50 @@
             </div>
             <div class="row" style="margin-bottom: 100px;margin-top: 50px;">
                 <div class="col-lg-12">
+                    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="getOwner()"
+                        style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4>Account Owner Balance</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Select User</mat-label>
+                                    <mat-select formControlName="name">
+                                        <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
+                                            *ngFor="let user of users">{{user.userName}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;"
+                                    mat-raised-button color="primary">
+                                    Get Owner
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </form>
+                    <mat-form-field appearance="outline" >
+                        <mat-label>Owner Balance</mat-label>
+                        <input matInput type="text" readonly="" [(ngModel)]="owner">
+                    </mat-form-field> 
+
+                    <form [formGroup]="initializeForm" (ngSubmit)="initialize()" style="padding: 10px;">
+                        <div style="margin-top: 10px;">
+                            <h4>Initialize</h4>
+                            <div>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Enter the Name</mat-label>
+                                    <input matInput type="text" formControlName="name" required>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="margin-left: 30px;">
+                                    <mat-label>Enter the Symbol</mat-label>
+                                    <input matInput type="text" formControlName="symbol" required>
+                                </mat-form-field>
+                                <button [disabled]="!initializeForm.valid" style="margin-left: 20px;" mat-raised-button
+                                    color="primary">
+                                    Initialize
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                   
                     <form [formGroup]="mintForm" (ngSubmit)="mint()" style="padding: 10px;">
                         <div style="margin-top: 10px;">
@@ -82,29 +140,33 @@
                             </div>
                         </div>
                     </form>
-                    <form [formGroup]="transferForm" (ngSubmit)="transfer()" style="padding: 10px;">
+
+                    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="getClientAccountBalance()"
+                        style="padding: 10px;">
                         <div style="margin-top: 10px;">
-                            <h4>Transfer</h4>
+                            <h4>Account Balance</h4>
                             <div>
-                                
                                 <mat-form-field appearance="outline">
                                     <mat-label>Select User</mat-label>
-                                    <mat-select formControlName="to">
+                                    <mat-select formControlName="name">
                                         <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
                                             *ngFor="let user of users">{{user.userName}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left: 10px;">
-                                    <mat-label>Amount</mat-label>
-                                    <input matInput type="number" formControlName="value" required>
-                                </mat-form-field>
-                                <button [disabled]="!transferForm.valid" style="margin-left: 20px;" mat-raised-button
-                                    color="primary">
-                                    Transfer
+                                <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;"
+                                    mat-raised-button color="primary">
+                                    Get Balance
                                 </button>
+                                
                             </div>
                         </div>
                     </form>
+                    <mat-form-field appearance="outline" >
+                        <mat-label>client Balance</mat-label>
+                        <input matInput type="text" readonly="" [(ngModel)]="clientBalance">
+                    </mat-form-field>  
+
+                    
                     <form [formGroup]="transferFromForm" (ngSubmit)="onSubmitTransferFrom()" style="padding: 10px;">
                         <div style="margin-top: 10px; width: 100%;">
                             <h4>Transfer From</h4>
@@ -135,7 +197,7 @@
                         </div>
                     </form>
 
-                    <form [formGroup]="clientAccountBalanceForm" (ngSubmit)="getBalance()"
+                    <form [formGroup]="BalanceOfForm" (ngSubmit)="getBalance()"
                         style="padding: 10px;">
                         <div style="margin-top: 10px;">
                             <h4>Account Balance</h4>
@@ -147,7 +209,7 @@
                                             *ngFor="let user of users">{{user.userName}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                                <button [disabled]="!clientAccountBalanceForm.valid" style="margin-left: 20px;"
+                                <button [disabled]="!BalanceOfForm.valid" style="margin-left: 20px;"
                                     mat-raised-button color="primary">
                                     Get Balance
                                 </button>
@@ -165,8 +227,8 @@
                             <h4>Burn</h4>
                             <div>
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Amount</mat-label>
-                                    <input matInput type="number" formControlName="amount" required>
+                                    <mat-label>tokenId</mat-label>
+                                    <input matInput type="number" formControlName="tokenId" required>
                                 </mat-form-field>
                                 <button [disabled]="!burnForm.valid" style="margin-left: 20px;" mat-raised-button
                                     color="primary">
