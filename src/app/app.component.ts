@@ -154,7 +154,7 @@ export class AppComponent implements OnInit {
 
   onSubmitTransferFrom() {
     this.request = this.transferFromForm.value;
-    this.request['username'] = this.selectedUser;
+    // this.request['username'] = this.selectedUser;
     this.apiService.transferFromSave(this.request).subscribe((response: any) => {
       if (response.status == 0) {
         this.snackBar.open("Transfer sucess", "X", { "duration": 3000 });
