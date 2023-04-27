@@ -100,26 +100,6 @@
                         <mat-label>Owner Balance</mat-label>
                         <input matInput type="text" readonly="" [(ngModel)]="owner">
                     </mat-form-field> 
-
-                    <form [formGroup]="initializeForm" (ngSubmit)="initialize()" style="padding: 10px;">
-                        <div style="margin-top: 10px;">
-                            <h4>Initialize</h4>
-                            <div>
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Enter the Name</mat-label>
-                                    <input matInput type="text" formControlName="name" required>
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left: 30px;">
-                                    <mat-label>Enter the Symbol</mat-label>
-                                    <input matInput type="text" formControlName="symbol" required>
-                                </mat-form-field>
-                                <button [disabled]="!initializeForm.valid" style="margin-left: 20px;" mat-raised-button
-                                    color="primary">
-                                    Initialize
-                                </button>
-                            </div>
-                        </div>
-                    </form>
                   
                     <form [formGroup]="mintForm" (ngSubmit)="mint()" style="padding: 10px;">
                         <div style="margin-top: 10px;">
@@ -187,7 +167,7 @@
                                 </mat-form-field>
                                 <mat-form-field appearance="outline">
                                     <mat-label>Amount</mat-label>
-                                    <input matInput type="number" formControlName="value" required>
+                                    <input matInput type="text" formControlName="value" required>
                                 </mat-form-field>
                                 <button style="margin-left: 20px;" [disabled]="!transferFromForm.valid"
                                     mat-raised-button color="primary">
@@ -196,27 +176,7 @@
                             </div>
                         </div>
                     </form>
-
-                    <form [formGroup]="BalanceOfForm" (ngSubmit)="getBalance()"
-                        style="padding: 10px;">
-                        <div style="margin-top: 10px;">
-                            <h4>Account Balance</h4>
-                            <div>
-                                <mat-form-field appearance="outline">
-                                    <mat-label>Select User</mat-label>
-                                    <mat-select formControlName="name">
-                                        <mat-option (onSelectionChange)="onSelected(user)" value="{{user.userName}}"
-                                            *ngFor="let user of users">{{user.userName}}</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <button [disabled]="!BalanceOfForm.valid" style="margin-left: 20px;"
-                                    mat-raised-button color="primary">
-                                    Get Balance
-                                </button>
-                                
-                            </div>
-                        </div>
-                    </form>
+ 
                     <mat-form-field appearance="outline" >
                         <mat-label>Balance</mat-label>
                         <input matInput type="text" readonly="" [(ngModel)]="balance">
@@ -228,7 +188,7 @@
                             <div>
                                 <mat-form-field appearance="outline">
                                     <mat-label>tokenId</mat-label>
-                                    <input matInput type="number" formControlName="tokenId" required>
+                                    <input matInput type="text" formControlName="tokenId" required>
                                 </mat-form-field>
                                 <button [disabled]="!burnForm.valid" style="margin-left: 20px;" mat-raised-button
                                     color="primary">
